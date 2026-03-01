@@ -78,39 +78,64 @@ public class Player extends Entity {
 		   keyH.downPressed == true ||
 		   keyH.leftPressed == true ||
 		   keyH.rightPressed == true) {
-			if(keyH.upPressed == true){
+			// Determine a display direction (prefer vertical for sprite)
+			if(keyH.upPressed) {
 				direction = "up";
-			}
-			if(keyH.downPressed == true){
+			} else if(keyH.downPressed) {
 				direction = "down";
-			}
-			if(keyH.leftPressed == true){
+			} else if(keyH.leftPressed) {
 				direction = "left";
-			}
-			if(keyH.rightPressed == true){
+			} else if(keyH.rightPressed) {
 				direction = "right";
 			}
 			
-			// CHECK TILE COLLISION
-			collisionOn = false;
-			gp.cChecker.checkTile(this);
+			boolean canMoveX = true;
+			boolean canMoveY = true;
+			int objectIndex = 999;
 			
-			// CHECK OBJECT COLLISION
-			int objectIndex = gp.cChecker.checkObject(this, true);
-			pickUpObject(objectIndex);
+			// Compute movement amounts and normalize for diagonal movement
+			int origSpeed = speed;
+			boolean movingVert = keyH.upPressed || keyH.downPressed;
+			boolean movingHorz = keyH.leftPressed || keyH.rightPressed;
+			double factor = (movingVert && movingHorz) ? (1.0 / Math.sqrt(2)) : 1.0;
+			int moveAmount = (int)Math.round(origSpeed * factor);
+			int moveY = 0;
+			int moveX = 0;
+			if(movingVert) moveY = (keyH.upPressed ? -moveAmount : moveAmount);
+			if(movingHorz) moveX = (keyH.leftPressed ? -moveAmount : moveAmount);
 			
-			// IF COLLISION IS FALSE, PLAYER CAN MOVE
-			if(collisionOn == false) {
-				switch (direction) {
-				case "up": worldY -= speed; break;
-				case "down": worldY += speed; break;
-				case "left": worldX -= speed; break;
-				case "right": worldX += speed; break;
-				}
+			// Check vertical movement separately (use move distance for collision checks)
+			if(movingVert) {
+				if(keyH.upPressed) direction = "up"; else direction = "down";
+				collisionOn = false;
+				speed = Math.abs(moveY);
+				gp.cChecker.checkTile(this);
+				int idx = gp.cChecker.checkObject(this, true);
+				speed = origSpeed;
+				if(collisionOn) canMoveY = false;
+				if(idx != 999) objectIndex = idx;
 			}
 			
-			spriteCounter++;
+			// Check horizontal movement separately (use move distance for collision checks)
+			if(movingHorz) {
+				if(keyH.leftPressed) direction = "left"; else direction = "right";
+				collisionOn = false;
+				speed = Math.abs(moveX);
+				gp.cChecker.checkTile(this);
+				int idx = gp.cChecker.checkObject(this, true);
+				speed = origSpeed;
+				if(collisionOn) canMoveX = false;
+				if(idx != 999 && objectIndex == 999) objectIndex = idx;
+			}
 			
+			// Move on allowed axes using normalized amounts
+			if(canMoveY) worldY += moveY;
+			if(canMoveX) worldX += moveX;
+			
+			// Handle object pickup once
+			if(objectIndex != 999) pickUpObject(objectIndex);
+			
+			spriteCounter++;
 			if(spriteCounter > 12){
 				if(spriteNum == 1) {
 					spriteNum = 2;
