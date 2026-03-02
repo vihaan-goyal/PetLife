@@ -15,7 +15,6 @@ public class UI {
 	public boolean messageOn = false;
 	public String message = "";
 	int messageCounter = 0;
-	public boolean gameFinished  = false;
 	
 	double playTime;
 	DecimalFormat dFormat = new DecimalFormat("#.##");
@@ -35,61 +34,29 @@ public class UI {
 	} 
 	
 	public void draw(Graphics2D g2) {
-		if(gameFinished == true) {
-			g2.setFont(arial_40);
-			g2.setColor(Color.WHITE);
-			
-			String text;
-			int textLength;
-			int x;
-			int y;
-			
-			// YOU FOUND THE TREASURE
-			text = "You found the treasure!";
-			textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-			x = (gp.screenWidth / 2) - (textLength / 2);
-			y = gp.screenHeight / 2 - (gp.tileSize * 3);
-			g2.drawString(text, x, y);
-			
-			// YOUR TIME IS
-			text = "Your time is: " + dFormat.format(playTime) + "!";
-			textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-			x = (gp.screenWidth / 2) - (textLength / 2);
-			y = gp.screenHeight / 2 + (gp.tileSize * 4);
-			g2.drawString(text, x, y);
-			
-			// CONGRATULATIONS
-			g2.setFont(arial_80b);
-			g2.setColor(Color.YELLOW);
-			text = "Congratulations!";
-			textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-			x = (gp.screenWidth / 2) - (textLength / 2);
-			y = gp.screenHeight / 2 + (gp.tileSize * 2);
-			g2.drawString(text, x, y);
-			
-			gp.gameThread = null; 
-		} else {
-			g2.setFont(arial_40);
-			g2.setColor(Color.WHITE);
-			g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2, gp.tileSize, gp.tileSize, null);
-			g2.drawString("x " + gp.player.hasKey, 74, 65);
-			
-			// TIME
-			playTime += (double)1/60;
-			g2.drawString(("Time:" + dFormat.format(playTime)), gp.tileSize * 11, 65);
-			
-			// MESSAGE
-			if(messageOn == true) {
-				g2.setFont(g2.getFont().deriveFont(30f));
-				
-				g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
-				messageCounter++;
-				
-				if(messageCounter > 120) {
-					messageCounter = 0;
-					messageOn = false;
-				}
-			}
-		}
-	}
+
+	int displayHour = gp.hour % 12;
+	if(displayHour == 0) displayHour = 12;
+
+	String period = (gp.hour < 12) ? "AM" : "PM";
+	String formattedTime = String.format("%02d:%02d %s", displayHour, gp.minute, period);
+
+	g2.setColor(Color.WHITE);
+
+	g2.drawString("Day: " + gp.currentDay + " / " + gp.MAX_DAYS, 600, 40);
+	g2.drawString("Time: " + formattedTime, 600, 70);
+
+    
+    g2.drawString("Money: $" + gp.money, 20, 40);
+
+    g2.drawString("Hunger: " + gp.pet.hunger, 20, 70);
+    g2.drawString("Happiness: " + gp.pet.happiness, 20, 100);
+    g2.drawString("Health: " + gp.pet.health, 20, 130);
+    g2.drawString("Energy: " + gp.pet.energy, 20, 160);
+    g2.drawString("Total Spent: $" + gp.pet.totalExpenses, 20, 190);
+
+    g2.drawString("F = Feed ($5)", 20, 230);
+    g2.drawString("P = Play ($10)", 20, 260);
+    g2.drawString("R = Rest (Free)", 20, 290);
+}
 }
