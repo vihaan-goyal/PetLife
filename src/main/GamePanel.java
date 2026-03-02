@@ -57,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITY
     public Player player = new Player(this, keyH);
-    public Pet pet;
+    public Pet pet = new Pet(this);
 
     // MONEY SYSTEM
     public int money = 100;
@@ -91,7 +91,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
     public void setupGame() {
-        pet = new Pet(this, "Buddy", "Dog");
+        pet = new Pet(this);
         gameState = PLAY_STATE;
     }
 
@@ -144,7 +144,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameState == PLAY_STATE) {
 
             player.Update();
-
+            pet.update();
             if (keyH.feedPressed && money >= 5) {
                 pet.feed();
                 money -= 5;
@@ -155,8 +155,11 @@ public class GamePanel extends JPanel implements Runnable {
                 money -= 10;
             }
 
+
             if (keyH.restPressed) {
                 pet.rest();
+                pet.worldX = player.worldX - tileSize;
+                pet.worldY = player.worldY;
             }
 
 			updateClock();
@@ -176,10 +179,9 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         tileManager.draw(g2);
-		player.Draw(g2);
 		pet.draw(g2);
+        player.Draw(g2);
 		ui.draw(g2);
-				
 
         g2.dispose();
     }

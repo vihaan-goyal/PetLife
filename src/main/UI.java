@@ -51,9 +51,9 @@ public class UI {
 
     g2.drawString("Hunger: " + gp.pet.hunger, 20, 70);
     g2.drawString("Happiness: " + gp.pet.happiness, 20, 100);
-    g2.drawString("Health: " + gp.pet.health, 20, 130);
+    //g2.drawString("Health: " + gp.pet.health, 20, 130);
     g2.drawString("Energy: " + gp.pet.energy, 20, 160);
-    g2.drawString("Total Spent: $" + gp.pet.totalExpenses, 20, 190);
+    //g2.drawString("Total Spent: $" + gp.pet.totalExpenses, 20, 190);
 
     g2.drawString("F = Feed ($5)", 20, 230);
     g2.drawString("P = Play ($10)", 20, 260);

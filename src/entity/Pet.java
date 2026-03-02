@@ -1,123 +1,204 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
+import main.UtilityTool;
 
-public class Pet {
+public class Pet extends Entity {
+
+    // Pet stats
+    public int hunger = 100;
+    public int happiness = 100;
+    public int energy = 100;
+
+    public String mood = "Happy";
 
     GamePanel gp;
 
-    public String name;
-    public String type;
-
-    public int hunger = 100;
-    public int happiness = 100;
-    public int health = 100;
-    public int energy = 100;
-
-    public int totalExpenses = 0;
-
-    private BufferedImage happySprite;
-    private BufferedImage sadSprite;
-    private BufferedImage sickSprite;
-
-    private BufferedImage currentSprite;
-
-    public final int screenX;
-    public final int screenY;
-
-    public Pet(GamePanel gp, String name, String type) {
-
+    public Pet(GamePanel gp) {
         this.gp = gp;
-        this.name = name;
-        this.type = type;
 
-        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
-        screenY = gp.screenHeight / 2 + 60;
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidArea.width = 16;
+        solidArea.height = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
 
-        loadImages();
-        updateMoodSprite();
+        setDefaultValues();
+        getPetImage();
     }
 
-    private void loadImages() {
-        try {
-            happySprite = ImageIO.read(new File("res/pet/happy.png"));
-            sadSprite = ImageIO.read(new File("res/pet/sad.png"));
-            sickSprite = ImageIO.read(new File("res/pet/sick.png"));
-        } catch (Exception e) {
-            System.out.println("Error loading pet images.");
-            e.printStackTrace();
-        }
-    }
-
-    public void draw(Graphics2D g2) {
-        if (currentSprite != null) {
-            g2.drawImage(currentSprite, screenX, screenY, gp.tileSize, gp.tileSize, null);
-        }
-    }
-
-    public void updateMoodSprite() {
-
-        if (health < 40) {
-            currentSprite = sickSprite;
-        }
-        else if (happiness < 40) {
-            currentSprite = sadSprite;
-        }
-        else {
-            currentSprite = happySprite;
-        }
-    }
+    public boolean isAlive = true;
+    public boolean isSick = false;
 
     public void checkHealth() {
 
-        if (hunger <= 20) {
-            health -= 10;
+        if(hunger <= 0 || energy <= 0) {
+            isAlive = false;
+            mood = "Dead";
+            return;
         }
 
-        if (happiness <= 20) {
-            health -= 5;
+        if(hunger < 20 || happiness < 20) {
+            isSick = true;
+            mood = "Sick";
+        } else {
+            isSick = false;
         }
 
-        if (energy <= 10) {
-            health -= 5;
+        updateMood();
+    }
+
+    private void clampStats() {
+        if(hunger < 0) hunger = 0;
+        if(happiness < 0) happiness = 0;
+        if(energy < 0) energy = 0;
+    }
+
+    private void updateMood() {
+        if(hunger < 30) {
+            mood = "Hungry";
         }
+        else if(energy < 30) {
+            mood = "Tired";
+        }
+        else if(happiness < 30) {
+            mood = "Sad";
+        }
+        else {
+            mood = "Happy";
+        }
+    }
 
-        if (health < 0) health = 0;
 
-        updateMoodSprite();
+    public void setDefaultValues() {
+        worldX = gp.player.worldX - gp.tileSize;
+        worldY = gp.player.worldY;
+        speed = 3; // slightly slower than player
+        direction = "down";
     }
 
     public void feed() {
         hunger += 20;
+        if(hunger > 100) hunger = 100;
+
         happiness += 5;
-        totalExpenses += 5;
-        clampStats();
-        updateMoodSprite();
+        updateMood();
     }
 
     public void play() {
         happiness += 15;
         energy -= 10;
-        totalExpenses += 10;
+        hunger -= 5;
+
         clampStats();
-        updateMoodSprite();
+        updateMood();
     }
 
     public void rest() {
         energy += 20;
-        clampStats();
-        updateMoodSprite();
+        if(energy > 100) energy = 100;
+
+        updateMood();
     }
 
-    private void clampStats() {
-        hunger = Math.max(0, Math.min(100, hunger));
-        happiness = Math.max(0, Math.min(100, happiness));
-        health = Math.max(0, Math.min(100, health));
-        energy = Math.max(0, Math.min(100, energy));
+    public void getPetImage() {
+        up1 = setup("happy");
+        up2 = setup("happy");
+        down1 = setup("happy");
+        down2 = setup("happy");
+        left1 = setup("happy");
+        left2 = setup("happy");
+        right1 = setup("happy");
+        right2 = setup("happy");
+    }
+
+    public BufferedImage setup(String imageName) {
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(getClass().getResource("/pet/" + imageName + ".png"));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        return image;
+    }
+
+    public void update() {
+        int dx = gp.player.worldX - worldX;
+        int dy = gp.player.worldY - worldY;
+
+        int distance = Math.abs(dx) + Math.abs(dy);
+
+        // STOP if close enough
+        if(distance < gp.tileSize / 2) {
+            return; // don't move
+        }
+
+        String primaryDir;
+        String secondaryDir;
+
+        if(Math.abs(dx) > Math.abs(dy)) {
+            primaryDir = (dx > 0) ? "right" : "left";
+            secondaryDir = (dy > 0) ? "down" : "up";
+        } else {
+            primaryDir = (dy > 0) ? "down" : "up";
+            secondaryDir = (dx > 0) ? "right" : "left";
+        }
+
+        // Try primary direction first
+        direction = primaryDir;
+        collisionOn = false;
+        gp.cChecker.checkTile(this);
+
+        if(!collisionOn) {
+            move();
+        } else {
+            // Try secondary direction if blocked
+            direction = secondaryDir;
+            collisionOn = false;
+            gp.cChecker.checkTile(this);
+
+            if(!collisionOn) {
+                move();
+            }
+        }
+    }
+
+    private void move() {
+        switch(direction) {
+            case "up": worldY -= speed; break;
+            case "down": worldY += speed; break;
+            case "left": worldX -= speed; break;
+            case "right": worldX += speed; break;
+        }
+    }
+
+    public void draw(Graphics2D g2) {
+
+        int screenX = worldX - gp.player.worldX + gp.player.screenX;
+        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+
+        BufferedImage image = null;
+
+        switch(direction) {
+            case "up": image = (spriteNum == 1) ? up1 : up2; break;
+            case "down": image = (spriteNum == 1) ? down1 : down2; break;
+            case "left": image = (spriteNum == 1) ? left1 : left2; break;
+            case "right": image = (spriteNum == 1) ? right1 : right2; break;
+        }
+
+        g2.drawImage(image, screenX, screenY, null);
     }
 }
