@@ -114,10 +114,10 @@ public class UI {
 			g2.drawString("R = Rest (Free)", 20, 260);
 		}
 		if(messageOn) {
-			g2.setFont(arial_40);
-			g2.setColor(Color.white);
+			g2.setFont(arial_20);
+			g2.setColor(Color.yellow);
 
-			g2.drawString(message, gp.tileSize , gp.tileSize *10);
+			g2.drawString(message, gp.tileSize*3 , 40);
 
 			messageCounter++;
 
