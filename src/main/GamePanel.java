@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import entity.Player;
 import entity.Pet;
 import tile.TileManager;
+import pet.PetManager;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -18,18 +19,19 @@ public class GamePanel extends JPanel implements Runnable {
     final int scale = 3;
 
     public final int tileSize = originalTileSizes * scale;
-    public final int maxScreenCol = 16;
-    public final int maxScreenRow = 12;
+    public final int maxScreenCol = 32;
+    public final int maxScreenRow = 20;
     public final int screenWidth = tileSize * maxScreenCol;
     public final int screenHeight = tileSize * maxScreenRow;
 	// WORLD SETTINGS
-	public final int maxWorldCol = 50;
-	public final int maxWorldRow = 50;
+	public final int maxWorldCol = 75;
+	public final int maxWorldRow = 75;
 
 	public int currentDay = 1;
 	public final int MAX_DAYS = 30;
-	//public int dayTimer = 0;
-	//public final int FRAMES_PER_DAY = 1800; // 5 seconds at 60fps
+	public int dayTimer = 0;
+	public final int FRAMES_PER_DAY = 1000; // Adjust this value to control the length of each in-game day
+    public String petNameInput = "";
 
     // FPS
     int fps = 60;
@@ -37,27 +39,29 @@ public class GamePanel extends JPanel implements Runnable {
 	// TIME
 	public int hour = 8;
 	public int minute = 0;
-
 	private int clockTimer = 0;
 
+    
 
     // SYSTEM
     TileManager tileManager = new TileManager(this);
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
 	public CollisionChecker cChecker = new CollisionChecker(this);
     public UI ui = new UI(this);
+    public PetManager petManager = new PetManager(this);
 
     Thread gameThread;
 
     // GAME STATE
-    public int gameState;
+    
     public final int TITLE_STATE = 0;
     public final int PLAY_STATE = 1;
 	public final int REPORT_STATE = 2;
+    public int gameState = TITLE_STATE;
 
     // ENTITY
     public Player player = new Player(this, keyH);
-    public Pet pet = new Pet(this);
+    public Pet pet = null;
 
     // MONEY SYSTEM
     public int money = 100;
@@ -91,8 +95,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
     public void setupGame() {
-        pet = new Pet(this);
-        gameState = PLAY_STATE;
+        gameState = TITLE_STATE;
     }
 
     public void startGameThread() {
@@ -124,6 +127,9 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void nextDay() {
 
+        Pet pet = petManager.currentPet;
+
+
 		currentDay++;
 
 		pet.hunger -= 8;
@@ -136,40 +142,73 @@ public class GamePanel extends JPanel implements Runnable {
 
 		if(currentDay > MAX_DAYS) {
 			gameState = REPORT_STATE;
+        }
     }
-}
 
     public void Update() {
 
+        if(gameState == TITLE_STATE){
+
+        if(keyH.onePressed){
+            pet = petManager.createDog();
+            pet.name = petNameInput;
+            gameState = PLAY_STATE;
+        }
+
+        if(keyH.twoPressed){
+            pet = petManager.createCat();
+            pet.name = petNameInput;
+            gameState = PLAY_STATE;
+        }
+
+        if(keyH.threePressed){
+            pet = petManager.createKoala();
+            pet.name = petNameInput;
+            gameState = PLAY_STATE;
+        }
+}
+
         if (gameState == PLAY_STATE) {
 
+            // player movement
             player.Update();
-            pet.update();
-            if (keyH.feedPressed && money >= 5) {
-                pet.feed();
-                money -= 5;
+
+            // update pet if one exists
+            if (petManager.currentPet != null) {
+
+                Pet pet = petManager.currentPet;
+
+                pet.update();
+
+                // FEED
+                if (keyH.feedPressed && money >= 5) {
+                    pet.feed();
+                    money -= 5;
+                    keyH.feedPressed = false;
+                }
+
+                // PLAY
+                if (keyH.playPressed && money >= 10) {
+                    pet.play();
+                    money -= 10;
+                    keyH.playPressed = false;
+                }
+
+                // REST
+                if (keyH.restPressed) {
+                    pet.rest();
+                    keyH.restPressed = false;
+                }
             }
 
-            if (keyH.playPressed && money >= 10) {
-                pet.play();
-                money -= 10;
+            updateClock();
+
+            dayTimer++;
+
+            if (dayTimer >= FRAMES_PER_DAY) {
+                nextDay();
+                dayTimer = 0;
             }
-
-
-            if (keyH.restPressed) {
-                pet.rest();
-                pet.worldX = player.worldX - tileSize;
-                pet.worldY = player.worldY;
-            }
-
-			updateClock();
-			player.Update();
-			/*dayTimer++;
-
-			if(dayTimer >= FRAMES_PER_DAY) {
-				nextDay();
-				dayTimer = 0;
-			}*/
         }
     }
 
@@ -179,8 +218,11 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         tileManager.draw(g2);
-		pet.draw(g2);
+		
         player.Draw(g2);
+        if(petManager.currentPet != null){
+            petManager.currentPet.draw(g2);
+        }
 		ui.draw(g2);
 
         g2.dispose();

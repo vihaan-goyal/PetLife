@@ -1,0 +1,25 @@
+package entity;
+
+import main.GamePanel;
+
+public class Dog extends Pet {
+
+    public Dog(GamePanel gp) {
+        super(gp);
+
+        hungerDecay = 1;
+        happinessDecay = 3;
+        energyDecay = 1;
+    }
+
+    @Override
+    public void play() {
+
+        happiness += 25;
+        energy -= 10;
+        hunger -= 5;
+
+        clampStats();
+        updateMood();
+    }
+}

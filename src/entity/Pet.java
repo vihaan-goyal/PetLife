@@ -12,12 +12,23 @@ import main.UtilityTool;
 
 public class Pet extends Entity {
 
-    // Pet stats
+    public String name = "Pet";
+    
     public int hunger = 100;
     public int happiness = 100;
     public int energy = 100;
 
     public String mood = "Happy";
+
+    public boolean isAlive = true;
+    public boolean isSick = false;
+
+    // stat decay rates
+    public int hungerDecay = 1;
+    public int happinessDecay = 1;
+    public int energyDecay = 1;
+
+    int statTimer = 0;
 
     GamePanel gp;
 
@@ -29,6 +40,7 @@ public class Pet extends Entity {
         solidArea.y = 16;
         solidArea.width = 16;
         solidArea.height = 16;
+
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
@@ -36,8 +48,31 @@ public class Pet extends Entity {
         getPetImage();
     }
 
-    public boolean isAlive = true;
-    public boolean isSick = false;
+    public void setDefaultValues() {
+        worldX = gp.player.worldX - gp.tileSize;
+        worldY = gp.player.worldY;
+        speed = 3;
+        direction = "down";
+    }
+
+    // ---------- STAT SYSTEM ----------
+
+    public void updateStats() {
+
+        statTimer++;
+
+        if(statTimer > 300) { // every ~5 seconds
+
+            hunger -= hungerDecay;
+            happiness -= happinessDecay;
+            energy -= energyDecay;
+
+            clampStats();
+            checkHealth();
+
+            statTimer = 0;
+        }
+    }
 
     public void checkHealth() {
 
@@ -57,13 +92,19 @@ public class Pet extends Entity {
         updateMood();
     }
 
-    private void clampStats() {
+    protected void clampStats() {
+
+        if(hunger > 100) hunger = 100;
+        if(happiness > 100) happiness = 100;
+        if(energy > 100) energy = 100;
+
         if(hunger < 0) hunger = 0;
         if(happiness < 0) happiness = 0;
         if(energy < 0) energy = 0;
     }
 
-    private void updateMood() {
+    protected void updateMood() {
+
         if(hunger < 30) {
             mood = "Hungry";
         }
@@ -78,19 +119,12 @@ public class Pet extends Entity {
         }
     }
 
-
-    public void setDefaultValues() {
-        worldX = gp.player.worldX - gp.tileSize;
-        worldY = gp.player.worldY;
-        speed = 3; // slightly slower than player
-        direction = "down";
-    }
+    // ---------- PLAYER ACTIONS ----------
 
     public void feed() {
         hunger += 20;
-        if(hunger > 100) hunger = 100;
-
         happiness += 5;
+        clampStats();
         updateMood();
     }
 
@@ -98,52 +132,29 @@ public class Pet extends Entity {
         happiness += 15;
         energy -= 10;
         hunger -= 5;
-
         clampStats();
         updateMood();
     }
 
     public void rest() {
         energy += 20;
-        if(energy > 100) energy = 100;
-
+        clampStats();
         updateMood();
     }
 
-    public void getPetImage() {
-        up1 = setup("happy");
-        up2 = setup("happy");
-        down1 = setup("happy");
-        down2 = setup("happy");
-        left1 = setup("happy");
-        left2 = setup("happy");
-        right1 = setup("happy");
-        right2 = setup("happy");
-    }
-
-    public BufferedImage setup(String imageName) {
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-
-        try {
-            image = ImageIO.read(getClass().getResource("/pet/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-
-        return image;
-    }
+    // ---------- PET AI FOLLOW ----------
 
     public void update() {
+
+        updateStats();
+
         int dx = gp.player.worldX - worldX;
         int dy = gp.player.worldY - worldY;
 
         int distance = Math.abs(dx) + Math.abs(dy);
 
-        // STOP if close enough
         if(distance < gp.tileSize / 2) {
-            return; // don't move
+            return;
         }
 
         String primaryDir;
@@ -157,7 +168,6 @@ public class Pet extends Entity {
             secondaryDir = (dx > 0) ? "right" : "left";
         }
 
-        // Try primary direction first
         direction = primaryDir;
         collisionOn = false;
         gp.cChecker.checkTile(this);
@@ -165,7 +175,7 @@ public class Pet extends Entity {
         if(!collisionOn) {
             move();
         } else {
-            // Try secondary direction if blocked
+
             direction = secondaryDir;
             collisionOn = false;
             gp.cChecker.checkTile(this);
@@ -177,12 +187,45 @@ public class Pet extends Entity {
     }
 
     private void move() {
+
         switch(direction) {
             case "up": worldY -= speed; break;
             case "down": worldY += speed; break;
             case "left": worldX -= speed; break;
             case "right": worldX += speed; break;
         }
+    }
+
+    // ---------- GRAPHICS ----------
+
+    public void getPetImage() {
+
+        up1 = setup("happy");
+        up2 = setup("happy");
+
+        down1 = setup("happy");
+        down2 = setup("happy");
+
+        left1 = setup("happy");
+        left2 = setup("happy");
+
+        right1 = setup("happy");
+        right2 = setup("happy");
+    }
+
+    public BufferedImage setup(String imageName) {
+
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(getClass().getResource("/pet/" + imageName + ".png"));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        return image;
     }
 
     public void draw(Graphics2D g2) {
