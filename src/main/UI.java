@@ -113,5 +113,18 @@ public class UI {
 			g2.drawString("P = Play ($10)", 20, 230);
 			g2.drawString("R = Rest (Free)", 20, 260);
 		}
+		if(messageOn) {
+			g2.setFont(arial_40);
+			g2.setColor(Color.white);
+
+			g2.drawString(message, gp.tileSize , gp.tileSize *10);
+
+			messageCounter++;
+
+			if(messageCounter > 120) {
+				messageCounter = 0;
+				messageOn = false;
+			}
+		}
 	}
 }

@@ -139,6 +139,24 @@ public class Player extends Entity {
                 standCounter = 0;
             }
         }
+
+        // Check object collision (chests, keys, etc.)
+        int objIndex = gp.cChecker.checkObject(this, true);
+        pickUpObject(objIndex);
+
+    }
+
+    public void pickUpObject(int i) {
+        if(i != 999) {
+            String objectName = gp.obj[i].name;
+
+            if(objectName.equals("Chest")) {
+
+                gp.money += 10;
+                gp.ui.showMessage("+$10 from chest!");
+                gp.obj[i] = null;
+            }
+        }
     }
 
     public void Draw(Graphics2D g2) {

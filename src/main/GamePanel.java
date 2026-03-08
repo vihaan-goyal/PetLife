@@ -11,6 +11,8 @@ import entity.Player;
 import entity.Pet;
 import tile.TileManager;
 import pet.PetManager;
+import object.SuperObject;
+import main.AssetSetter;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -41,7 +43,6 @@ public class GamePanel extends JPanel implements Runnable {
 	public int minute = 0;
 	private int clockTimer = 0;
 
-    
 
     // SYSTEM
     TileManager tileManager = new TileManager(this);
@@ -49,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public CollisionChecker cChecker = new CollisionChecker(this);
     public UI ui = new UI(this);
     public PetManager petManager = new PetManager(this);
+    AssetSetter aSetter = new AssetSetter(this);
 
     Thread gameThread;
 
@@ -65,6 +67,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     // MONEY SYSTEM
     public int money = 100;
+
+    //OBJECTS
+    public SuperObject obj[] = new SuperObject[20];
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -95,6 +100,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
     public void setupGame() {
+        aSetter.setObject();
         gameState = TITLE_STATE;
     }
 
@@ -219,12 +225,18 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileManager.draw(g2);
 		
-        player.Draw(g2);
+        for(int i = 0; i < obj.length; i++) {
+            if(obj[i] != null) {
+                obj[i].draw(g2, this);
+            }
+        }
+
         if(petManager.currentPet != null){
             petManager.currentPet.draw(g2);
         }
-		ui.draw(g2);
 
+        player.Draw(g2);
+		ui.draw(g2);
         g2.dispose();
     }
 }
