@@ -5,6 +5,9 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
@@ -242,6 +245,31 @@ public class Pet extends Entity {
             case "right": image = (spriteNum == 1) ? right1 : right2; break;
         }
 
+        // draw pet sprite
         g2.drawImage(image, screenX, screenY, null);
+
+
+        // ---------- NAME TAG ----------
+        if(name != null && !name.equals("")) {
+
+            g2.setFont(new Font("Arial", Font.BOLD, 16));
+
+            int nameWidth = g2.getFontMetrics().stringWidth(name);
+            int nameX = screenX + gp.tileSize/2 - nameWidth/2;
+            int nameY = screenY - 6;
+
+            // background box
+            g2.setColor(new Color(0,0,0,150));
+            g2.fillRoundRect(nameX - 6, nameY - 16, nameWidth + 12, 18, 8, 8);
+
+            // shadow
+            g2.setColor(Color.black);
+            g2.drawString(name, nameX+2, nameY+2);
+
+            // main text
+            g2.setColor(Color.white);
+            g2.drawString(name, nameX, nameY);
+        }
     }
+    
 }

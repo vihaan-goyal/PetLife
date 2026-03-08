@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     public UI ui = new UI(this);
     public PetManager petManager = new PetManager(this);
     AssetSetter aSetter = new AssetSetter(this);
+    MouseHandler mouseH = new MouseHandler(this);
 
     Thread gameThread;
 
@@ -77,6 +78,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        this.addMouseListener(mouseH);
     }
 
 	public void updateClock() {
