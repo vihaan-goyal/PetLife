@@ -22,7 +22,7 @@ public class TileManager {
 		mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
 		
 		GetTileImage();
-		loadMap("/maps/map01.txt");
+		loadMap("/maps/levyMap.txt");
 	}
 	
 	public void GetTileImage() {
