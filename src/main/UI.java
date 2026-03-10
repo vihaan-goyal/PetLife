@@ -29,6 +29,12 @@ public class UI {
 	public int foodCosts = 0;
 	public int vetCosts = 0;
 
+	//NPC dialogue
+	// dialogue system
+	public boolean dialogueOn = false;
+	public String[] dialogueLines;
+	public int dialogueIndex = 0;
+
     public UI(GamePanel gp){
         this.gp = gp;
 
@@ -41,6 +47,38 @@ public class UI {
         message = text;
         messageOn = true;
     }
+
+	public void startDialogue(String[] lines){
+		dialogueLines = lines;
+		dialogueIndex = 0;
+		dialogueOn = true;
+	}
+
+	public void drawDialogueBox(Graphics2D g2){
+
+		int boxX = gp.tileSize;
+		int boxY = gp.screenHeight - gp.tileSize * 4;
+		int boxWidth = gp.screenWidth - gp.tileSize * 2;
+		int boxHeight = gp.tileSize * 2;
+
+		// background
+		g2.setColor(new Color(0,0,0,200));
+		g2.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 25,25);
+
+		// border
+		g2.setColor(Color.WHITE);
+		g2.setStroke(new java.awt.BasicStroke(4));
+		g2.drawRoundRect(boxX, boxY, boxWidth, boxHeight, 25,25);
+
+		g2.setFont(optionFont);
+
+		String text = dialogueLines[dialogueIndex];
+
+		int textX = boxX + 20;
+		int textY = boxY + 50;
+
+		g2.drawString("Wiseman: " + text, textX, textY);
+	}
 
 	public void drawWallet(Graphics2D g2){
 
@@ -83,6 +121,9 @@ public class UI {
 		if(gp.showWallet){
 			drawWallet(g2);
 			return;
+		}
+		if(dialogueOn){
+			drawDialogueBox(g2);
 		}
 
         if(gp.gameState == gp.TITLE_STATE){
@@ -191,11 +232,13 @@ public class UI {
             g2.drawString("Hunger: " + gp.petManager.currentPet.hunger, 20, 70);
             g2.drawString("Happiness: " + gp.petManager.currentPet.happiness, 20, 100);
             g2.drawString("Energy: " + gp.petManager.currentPet.energy, 20, 130);
+			
         }
 
         g2.drawString("F = Feed ($5)", 20, 180);
         g2.drawString("P = Play ($10)", 20, 210);
         g2.drawString("R = Rest (Free)", 20, 240);
+		g2.drawString("I = Wallet", 20, 270);
 
         // message popup
         if(messageOn){

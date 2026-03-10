@@ -13,6 +13,9 @@ import tile.TileManager;
 import pet.PetManager;
 import object.SuperObject;
 import main.AssetSetter;
+import entity.Entity;
+
+
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -73,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     //OBJECTS
     public SuperObject obj[] = new SuperObject[20];
+    public Entity npc[] = new Entity[10];
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -105,6 +109,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         aSetter.setObject();
+        aSetter.setNPC();
         gameState = TITLE_STATE;
     }
 
@@ -166,10 +171,6 @@ public class GamePanel extends JPanel implements Runnable {
                 showWallet = !showWallet;
                 keyH.walletPressed = false;
             }
-
-            /*if(!showWallet){
-                player.Update();
-            }*/
         
 
             // update pet if one exists
@@ -223,6 +224,12 @@ public class GamePanel extends JPanel implements Runnable {
         for(int i = 0; i < obj.length; i++) {
             if(obj[i] != null) {
                 obj[i].draw(g2, this);
+            }
+        }
+
+        for(int i = 0; i < npc.length; i++) {
+            if(npc[i] != null) {
+                npc[i].draw(g2, this);
             }
         }
 

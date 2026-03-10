@@ -78,6 +78,30 @@ public class Player extends Entity {
 
     public void Update() {
 
+        if(keyH.enterPressed){
+
+            for(int i = 0; i < gp.npc.length; i++){
+
+                if(gp.npc[i] != null){
+
+                    int dx = Math.abs(worldX - gp.npc[i].worldX);
+                    int dy = Math.abs(worldY - gp.npc[i].worldY);
+
+                    if(dx < gp.tileSize && dy < gp.tileSize){
+
+                        gp.ui.startDialogue(new String[]{
+                            "Hello, fair traveler!",
+                            "Welcome to Tung Tung Pet.",
+                            "Take care of your noble friend!"
+                        });
+
+                        keyH.enterPressed = false;
+                        return;
+                    }
+                }
+            }
+        }
+
         if (keyH.upPressed || keyH.downPressed ||
             keyH.leftPressed || keyH.rightPressed) {
 

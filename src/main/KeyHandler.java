@@ -9,6 +9,7 @@ public class KeyHandler implements KeyListener {
     public boolean feedPressed, playPressed, restPressed;
     public boolean onePressed, twoPressed, threePressed;
     public boolean walletPressed;
+    public boolean enterPressed;
 
     GamePanel gp;
 
@@ -52,6 +53,22 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_3) threePressed = true;
 
         if(code == KeyEvent.VK_I) walletPressed = true;
+
+        if(code == KeyEvent.VK_ENTER) {
+
+            // advance dialogue if active
+            if(gp.ui.dialogueOn){
+                gp.ui.dialogueIndex++;
+
+                if(gp.ui.dialogueIndex >= gp.ui.dialogueLines.length){
+                    gp.ui.dialogueOn = false;
+                }
+
+                return;
+            }
+
+            enterPressed = true;
+        }
     }
 
     @Override
@@ -73,6 +90,8 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_3) threePressed = false;
 
         if(code == KeyEvent.VK_I) walletPressed = false;
+
+        if(code == KeyEvent.VK_ENTER) enterPressed = false;
     }
 
     
