@@ -242,7 +242,7 @@ public class Pet extends Entity {
         left2 = setup(petType + "_left_1");
 
         right1 = setup(petType + "_right_1");
-        right2 = setup(petType + "_right_1");
+        right2 = setup(petType + "_right_2");
     }
 
     public BufferedImage setup(String imageName) {
