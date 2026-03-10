@@ -35,6 +35,11 @@ public class Pet extends Entity {
 
     int statTimer = 0;
 
+
+    int directionTimer = 0;
+    int directionDelay = 10; // frames before sprite can change
+    String lastDirection = "down";
+
     GamePanel gp;
 
     public Pet(GamePanel gp) {
@@ -173,12 +178,34 @@ public class Pet extends Entity {
             secondaryDir = (dx > 0) ? "right" : "left";
         }
 
-        direction = primaryDir;
+        //direction = primaryDir;
+
+        
+
+        if(!primaryDir.equals(lastDirection)) {
+            directionTimer++;
+
+            if(directionTimer > directionDelay) {
+                direction = primaryDir;
+                lastDirection = primaryDir;
+                directionTimer = 0;
+            }
+        } else {
+            direction = primaryDir;
+            directionTimer = 0;
+        }
+
         collisionOn = false;
         gp.cChecker.checkTile(this);
 
         if(!collisionOn) {
             move();
+
+            spriteCounter++;
+            if(spriteCounter > 12) {
+                spriteNum = (spriteNum == 1) ? 2 : 1;
+                spriteCounter = 0;
+            }
         } else {
 
             direction = secondaryDir;
@@ -209,7 +236,7 @@ public class Pet extends Entity {
         up2 = setup(petType + "_up_1");
 
         down1 = setup(petType + "_down_1");
-        down2 = setup(petType + "_down_1");
+        down2 = setup(petType + "_down_2");
 
         left1 = setup(petType + "_left_1");
         left2 = setup(petType + "_left_1");
