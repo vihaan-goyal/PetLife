@@ -239,7 +239,7 @@ public class Pet extends Entity {
         down2 = setup(petType + "_down_2");
 
         left1 = setup(petType + "_left_1");
-        left2 = setup(petType + "_left_1");
+        left2 = setup(petType + "_left_2");
 
         right1 = setup(petType + "_right_1");
         right2 = setup(petType + "_right_2");
