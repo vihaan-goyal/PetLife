@@ -87,12 +87,19 @@ public class Player extends Entity {
                     int dx = Math.abs(worldX - gp.npc[i].worldX);
                     int dy = Math.abs(worldY - gp.npc[i].worldY);
 
-                    if(dx < gp.tileSize && dy < gp.tileSize){
+                    if(dx < gp.tileSize*2 && dy < gp.tileSize*2){
+
+                        String type = gp.petManager.currentPet.petType;
+                        String name = gp.petManager.currentPet.name;
+
 
                         gp.ui.startDialogue(new String[]{
                             "Hello, fair traveler!",
-                            "Welcome to Tung Tung Pet.",
-                            "Take care of your noble friend!"
+                            "You don't remember? You helplessly begged for a pet from your Dad.",
+                            "Your pet is a little " + type.toUpperCase() + ", and you named it " + name.toUpperCase() + ".",
+                            "With my awesome magic, I've granted you $100 to start off.",
+                            "If you take good care of your pet, I might even give you some more.",
+                            "Just talk to me after you've completed some tasks on your TODO list."
                         });
 
                         keyH.enterPressed = false;
@@ -102,6 +109,18 @@ public class Player extends Entity {
             }
         }
 
+        if(gp.taskManager.allCompleted()){
+
+            gp.money += 100;
+            gp.ui.showMessage("Thanks! Here is your reward.");
+
+        }else{
+
+            gp.ui.showMessage("You still have tasks to finish.");
+        }
+
+        if(keyH.taskPressed) gp.ui.showTasks = !gp.ui.showTasks;
+        
         if (keyH.upPressed || keyH.downPressed ||
             keyH.leftPressed || keyH.rightPressed) {
 

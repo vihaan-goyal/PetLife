@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import quest.Task;
+
 public class UI {
 
     GamePanel gp;
@@ -34,6 +36,9 @@ public class UI {
 	public boolean dialogueOn = false;
 	public String[] dialogueLines;
 	public int dialogueIndex = 0;
+
+	//task system
+	public boolean showTasks = false;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -117,6 +122,11 @@ public class UI {
 	}
 
     public void draw(Graphics2D g2){
+
+		if(showTasks){
+			drawTasks(g2);
+			return;
+		}
 
 		if(gp.showWallet){
 			drawWallet(g2);
@@ -255,4 +265,39 @@ public class UI {
             }
         }
     }
+
+	public void drawTasks(Graphics2D g2){
+
+		// background (same style as wallet)
+		g2.setColor(new Color(232,169,97));
+		g2.fillRect(gp.screenWidth/4-5, gp.screenHeight/4+5, gp.screenWidth/2, gp.screenHeight/2);
+
+		// border
+		g2.setColor(new Color(115,83,47));
+		g2.setStroke(new java.awt.BasicStroke(5));
+		g2.drawRect(gp.screenWidth/4-5, gp.screenHeight/4+5, gp.screenWidth/2, gp.screenHeight/2);
+
+		g2.setFont(optionFont);
+		g2.setColor(Color.WHITE);
+
+		int x = gp.tileSize * 8;
+		int y = gp.tileSize * 6;
+
+		g2.drawString("Tasks", x, y);
+
+		y += gp.tileSize * 2;
+
+		for(Task t : gp.taskManager.tasks){
+
+			String status = t.completed ? "✓ " : "• ";
+
+			g2.drawString(status + t.name, x, y);
+
+			y += gp.tileSize;
+		}
+
+		y += gp.tileSize;
+
+		g2.drawString("Press T to close", x, y);
+	}
 }

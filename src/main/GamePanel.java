@@ -14,6 +14,8 @@ import pet.PetManager;
 import object.SuperObject;
 import main.AssetSetter;
 import entity.Entity;
+import quest.Task;
+import quest.TaskManager;
 
 
 
@@ -55,6 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
     public PetManager petManager = new PetManager(this);
     AssetSetter aSetter = new AssetSetter(this);
     MouseHandler mouseH = new MouseHandler(this);
+    public TaskManager taskManager = new TaskManager(this);
 
     Thread gameThread;
 
@@ -108,6 +111,21 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
     public void setupGame() {
+
+        taskManager.addTask(new Task(
+                "Visit Park",
+                "Take your pet to the park",
+                30 * tileSize,
+                25 * tileSize
+        ));
+
+        taskManager.addTask(new Task(
+                "Visit Vet",
+                "Take your pet for a checkup",
+                10 * tileSize,
+                40 * tileSize
+        ));
+
         aSetter.setObject();
         aSetter.setNPC();
         gameState = TITLE_STATE;
@@ -166,12 +184,29 @@ public class GamePanel extends JPanel implements Runnable {
 
             // player movement
             player.Update();
+            taskManager.update();
+
 
             if(keyH.walletPressed){
                 showWallet = !showWallet;
                 keyH.walletPressed = false;
             }
         
+            if(keyH.taskPressed && keyH.taskToggleReady){
+
+                ui.showTasks = !ui.showTasks;
+
+                keyH.taskToggleReady = false;
+            }
+
+            if(keyH.taskPressed && keyH.taskToggleReady){
+
+                ui.showTasks = !ui.showTasks;
+
+                showWallet = false;
+
+                keyH.taskToggleReady = false;
+            }
 
             // update pet if one exists
             if (petManager.currentPet != null) {
