@@ -211,6 +211,12 @@ public class GamePanel extends JPanel implements Runnable {
                     pet.rest();
                     keyH.restPressed = false;
                 }
+
+              // SPEED ADJUSTMENT BASED ON ENERGY
+                if(pet.energy > 80) pet.speed = 4;
+                else if(pet.energy > 60) pet.speed = 3;
+                else if(pet.energy > 40) pet.speed = 2;
+                else if(pet.energy > 0) pet.speed = 1;
             }
 
             updateClock();
