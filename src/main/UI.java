@@ -127,7 +127,7 @@ public class UI {
 
     public void drawPetStats(Graphics2D g2){
 
-        // dark background
+        // background
         g2.setColor(new Color(232,169,97));
         g2.fillRect(gp.screenWidth/4-5, gp.screenHeight/4+5, gp.screenWidth/2, gp.screenHeight/2);
 
@@ -146,21 +146,59 @@ public class UI {
 
         if(gp.petManager.currentPet != null){
 
+            var pet = gp.petManager.currentPet;
+
+            int barWidth = gp.tileSize * 4;
+            int barHeight = 20;
+            int barX = x + 160;
+
+            // HUNGER
             y += gp.tileSize * 2;
+            g2.drawString("Hunger: ", x, y);
 
-            g2.drawString("Hunger: " + gp.petManager.currentPet.hunger, x, y);
+            g2.setColor(Color.DARK_GRAY);
+            g2.fillRect(barX-20, y-20, barWidth, barHeight);
 
+            g2.setColor(new Color(150, 75, 0)); //brown
+            g2.fillRect(barX-20, y-20, (int)(barWidth * (pet.hunger / 100.0)), barHeight);
+
+            g2.setColor(Color.BLACK);
+            g2.drawRect(barX-20, y-20, barWidth, barHeight);
+
+
+            // HAPPINESS
             y += gp.tileSize;
+            g2.setColor(Color.WHITE);
+            g2.drawString("Happiness:", x, y);
 
-            g2.drawString("Happiness: " + gp.petManager.currentPet.happiness, x, y);
+            g2.setColor(Color.DARK_GRAY);
+            g2.fillRect(barX+20, y-20, barWidth, barHeight);
 
+            g2.setColor(new Color (255,244,79)); //yellow
+            g2.fillRect(barX+20, y -20, (int)(barWidth * (pet.happiness / 100.0)), barHeight);
+
+            g2.setColor(Color.BLACK);
+            g2.drawRect(barX+20, y-20, barWidth, barHeight);
+
+
+            // ENERGY
             y += gp.tileSize;
+            g2.setColor(Color.WHITE);
+            g2.drawString("Energy: ", x, y);
 
-            g2.drawString("Energy: " + gp.petManager.currentPet.energy, x, y);
+            g2.setColor(Color.DARK_GRAY);
+            g2.fillRect(barX-30, y-20, barWidth, barHeight);
+
+            g2.setColor(Color.GREEN);
+            g2.fillRect(barX-30, y-20, (int)(barWidth * (pet.energy / 100.0)), barHeight);
+
+            g2.setColor(Color.BLACK);
+            g2.drawRect(barX-30, y-20, barWidth, barHeight);
         }
 
         y += gp.tileSize * 2;
 
+        g2.setColor(Color.WHITE);
         g2.drawString("Press 4 to close", x, y);
     }
 
