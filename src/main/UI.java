@@ -294,9 +294,9 @@ public class UI {
 
         //g2.drawString("Money: $" + gp.money, 20, 40);
 
-        g2.drawString("F = Feed ($5)", 20, 180);
+        g2.drawString("F = Feed", 20, 180);
         g2.drawString("P = Play ($10)", 20, 210);
-        g2.drawString("R = Rest (Free)", 20, 240);
+        g2.drawString("R = Rest (Fee)", 20, 240);
 
         // message popup
         if(messageOn){
