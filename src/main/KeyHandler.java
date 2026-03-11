@@ -11,6 +11,7 @@ public class KeyHandler implements KeyListener {
     public boolean walletPressed;
     public boolean enterPressed;
     public boolean taskPressed;
+    public boolean inventoryPressed;
 
     GamePanel gp;
 
@@ -57,6 +58,8 @@ public class KeyHandler implements KeyListener {
 
         if(code == KeyEvent.VK_T) taskPressed = true;
 
+        if(code == KeyEvent.VK_E) inventoryPressed = true;
+
         if(code == KeyEvent.VK_ENTER) {
 
             // advance dialogue if active
@@ -97,6 +100,8 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER) enterPressed = false;
 
         if(code == KeyEvent.VK_T) taskPressed = false;
+
+        if(code == KeyEvent.VK_E) inventoryPressed = false;
             
     }
 

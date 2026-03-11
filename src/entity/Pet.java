@@ -40,6 +40,8 @@ public class Pet extends Entity {
     int directionDelay = 10; // frames before sprite can change
     String lastDirection = "down";
 
+    
+
     GamePanel gp;
 
     public Pet(GamePanel gp) {
@@ -115,13 +117,13 @@ public class Pet extends Entity {
 
     protected void updateMood() {
 
-        if(hunger < 30) {
+        if(hunger < 40) {
             mood = "Hungry";
         }
-        else if(energy < 30) {
+        else if(energy < 40) {
             mood = "Tired";
         }
-        else if(happiness < 30) {
+        else if(happiness < 40) {
             mood = "Sad";
         }
         else {
@@ -136,6 +138,9 @@ public class Pet extends Entity {
         happiness += 5;
         clampStats();
         updateMood();
+        if(mood.equals("Happy")){
+            gp.ui.showMessage(name + " loved the food!");
+        }
     }
 
     public void play() {
@@ -152,11 +157,31 @@ public class Pet extends Entity {
         updateMood();
     }
 
+    private void updateBehavior() {
+
+        if(mood.equals("Happy")) {
+            speed = 4;
+        }
+        else if(mood.equals("Hungry")) {
+            speed = 2;
+        }
+        else if(mood.equals("Tired")) {
+            speed = 1;
+        }
+        else if(mood.equals("Sad")) {
+            speed = 2;
+        }
+        else if(mood.equals("Sick")) {
+            speed = 1;
+        }
+    }
+
     // ---------- PET AI FOLLOW ----------
 
     public void update() {
 
         updateStats();
+        updateBehavior();
 
         int dx = gp.player.worldX - worldX;
         int dy = gp.player.worldY - worldY;
@@ -299,6 +324,26 @@ public class Pet extends Entity {
             g2.setColor(Color.white);
             g2.drawString(name, nameX, nameY);
         }
+
+        // ---------- MOOD TAG ----------
+        if(mood != null){
+
+            g2.setFont(new Font("Arial", Font.PLAIN, 12));
+
+            int moodWidth = g2.getFontMetrics().stringWidth(mood);
+            int moodX = screenX + gp.tileSize/2 - moodWidth/2;
+            int moodY = screenY - 26;
+
+            g2.setColor(new Color(0,0,0,120));
+            g2.fillRoundRect(moodX - 4, moodY - 12, moodWidth + 8, 16, 6, 6);
+
+            if(mood.equals("Happy")) g2.setColor(Color.green);
+            else if(mood.equals("Hungry")) g2.setColor(Color.orange);
+            else if(mood.equals("Sad")) g2.setColor(Color.red);
+            else g2.setColor(Color.yellow);
+            g2.drawString(mood, moodX, moodY);
+        }
+
     }
     
 }

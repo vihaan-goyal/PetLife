@@ -5,6 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import quest.Task;
+import entity.NPC_Merchant;
+import entity.NPC_OldMan;
+import inventory.InventoryManager;
 
 public class UI {
 
@@ -36,6 +39,7 @@ public class UI {
 	public boolean dialogueOn = false;
 	public String[] dialogueLines;
 	public int dialogueIndex = 0;
+    public String speaker = "NPC";
 
 	
     public UI(GamePanel gp){
@@ -80,12 +84,16 @@ public class UI {
 		int textX = boxX + 20;
 		int textY = boxY + 50;
 
-		g2.drawString("Wiseman: " + text, textX, textY);
+		g2.drawString(speaker + ": " + text, textX, textY);
 	}
 
 	
 
     public void draw(Graphics2D g2){
+
+        if(gp.inventoryOpen){
+            drawInventory(g2);
+        }
 
 		if(gp.showTasks){
 			drawTasks(g2);
@@ -206,6 +214,7 @@ public class UI {
             g2.drawString("Hunger: " + gp.petManager.currentPet.hunger, 20, 70);
             g2.drawString("Happiness: " + gp.petManager.currentPet.happiness, 20, 100);
             g2.drawString("Energy: " + gp.petManager.currentPet.energy, 20, 130);
+
 			
         }
 
@@ -213,6 +222,9 @@ public class UI {
         g2.drawString("P = Play ($10)", 20, 210);
         g2.drawString("R = Rest (Free)", 20, 240);
 		g2.drawString("I = Wallet", 20, 270);
+        g2.drawString("T = Tasks", 20, 300);
+        g2.drawString("E = Inventory", 20, 330);
+
 
         // message popup
         if(messageOn){
@@ -230,6 +242,38 @@ public class UI {
         }
     }
 
+    //DRAW INVENTORY
+    public void drawInventory(Graphics2D g2){
+
+        // dark background
+        g2.setColor(new Color(232,169,97));
+        g2.fillRect(gp.screenWidth/4-5, gp.screenHeight/4+5, gp.screenWidth/2, gp.screenHeight/2);
+
+        // border
+        g2.setColor(new Color(115,83,47));
+        g2.setStroke(new java.awt.BasicStroke(5));
+        g2.drawRect(gp.screenWidth/4-5, gp.screenHeight/4+5, gp.screenWidth/2, gp.screenHeight/2);
+
+        g2.setFont(smallFont);
+        g2.setColor(Color.WHITE);
+
+        int x = gp.tileSize * 8;
+        int y = gp.tileSize * 6;
+
+        g2.setFont(optionFont);
+        g2.drawString("Inventory", x, y);
+
+        y += gp.tileSize * 2;
+
+        int foodCount = gp.inventoryManager.getItemCount("food");
+        g2.drawString("Pet Food: " + foodCount, x, y);
+
+        y += gp.tileSize;
+
+        g2.drawString("Press E to close", x, y);
+    }
+
+    //DRAW TASKS
 	public void drawTasks(Graphics2D g2){
 
 		// background (same style as wallet)

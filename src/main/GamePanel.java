@@ -14,6 +14,7 @@ import pet.PetManager;
 import object.SuperObject;
 import entity.Entity;
 import quest.TaskManager;
+import inventory.InventoryManager;
 
 
 
@@ -56,6 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
     AssetSetter aSetter = new AssetSetter(this);
     MouseHandler mouseH = new MouseHandler(this);
     public TaskManager taskManager = new TaskManager(this);
+    public InventoryManager inventoryManager = new InventoryManager(this);
 
     Thread gameThread;
 
@@ -82,6 +84,10 @@ public class GamePanel extends JPanel implements Runnable {
     public SuperObject obj[] = new SuperObject[20];
     public Entity npc[] = new Entity[10];
 
+    //INVENTORY
+    public boolean inventoryOpen = false;
+
+    
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -170,6 +176,10 @@ public class GamePanel extends JPanel implements Runnable {
             player.Update();
             taskManager.update();
 
+            if(keyH.inventoryPressed){
+                inventoryOpen = !inventoryOpen;
+                keyH.inventoryPressed = false;
+            }
 
             if(keyH.walletPressed){
                 showWallet = !showWallet;
@@ -191,10 +201,18 @@ public class GamePanel extends JPanel implements Runnable {
                 pet.update();
 
                 // FEED
-                if (keyH.feedPressed && money >= 5) {
-                    pet.feed();
-                    money -= 5;
-                    totalSpent += 5;
+                if (keyH.feedPressed) {
+
+                    if(inventoryManager.removeItem("food", 1)) {
+
+                        pet.feed();
+
+                    } else {
+
+                        ui.showMessage("You have no pet food!");
+
+                    }
+
                     keyH.feedPressed = false;
                 }
 
@@ -211,12 +229,6 @@ public class GamePanel extends JPanel implements Runnable {
                     pet.rest();
                     keyH.restPressed = false;
                 }
-
-              // SPEED ADJUSTMENT BASED ON ENERGY
-                if(pet.energy > 80) pet.speed = 4;
-                else if(pet.energy > 60) pet.speed = 3;
-                else if(pet.energy > 40) pet.speed = 2;
-                else if(pet.energy > 0) pet.speed = 1;
             }
 
             updateClock();

@@ -56,6 +56,7 @@ public class NPC_OldMan extends Entity {
 
     @Override
     public void interact(){
+        gp.ui.speaker = "Wiseman";
 
         // Stage 0: give quest
         if(questStage == 0){
@@ -91,8 +92,20 @@ public class NPC_OldMan extends Entity {
 
                 gp.ui.startDialogue(new String[]{
                     "Excellent work!",
-                    "Here is your reward."
+                    "Here is your reward.",
+                    "Now that you've learned the ropes, I'll be assigning more tasks.",
+                    "Well then, get at them!"
                 });
+
+
+                gp.taskManager.addTask(new Task(
+                    "Visit Food Store",
+                    "Take your pet to the food store",
+                    26 * gp.tileSize,
+                    36 * gp.tileSize
+                ));
+
+
 
                 gp.money += 50;
 
@@ -110,10 +123,25 @@ public class NPC_OldMan extends Entity {
         // Stage 2: quest already finished
         else if(questStage == 2){
 
-            gp.ui.startDialogue(new String[]{
-                "Thank you again for helping.",
-                "Take good care of your pet!"
-            });
+            if(gp.taskManager.allCompleted()){
+
+                gp.ui.startDialogue(new String[]{
+                    "Excellent work!",
+                    "You're becoming a pro at taking care of your pet!",
+                    "Your Dad will sure be happy!"
+                });
+
+                gp.money += 50;
+
+                questStage = 2;
+            }
+            else{
+
+                gp.ui.startDialogue(new String[]{
+                    "You still have tasks left.",
+                    "Check your task list."
+                });
+            }
 
         }
 
