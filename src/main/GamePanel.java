@@ -87,6 +87,9 @@ public class GamePanel extends JPanel implements Runnable {
     //INVENTORY
     public boolean inventoryOpen = false;
 
+    //PET STATS
+    public boolean petStatsOpen = false;
+
     
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -180,7 +183,11 @@ public class GamePanel extends JPanel implements Runnable {
                 inventoryOpen = !inventoryOpen;
                 keyH.inventoryPressed = false;
             }
-
+            
+            if(keyH.petStatsPressed){
+                petStatsOpen = !petStatsOpen;
+                keyH.petStatsPressed = false;
+            }
             if(keyH.walletPressed){
                 showWallet = !showWallet;
                 keyH.walletPressed = false;
@@ -269,6 +276,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         player.Draw(g2);
 		ui.draw(g2);
+        if(petStatsOpen){
+            ui.drawPetStats(g2);
+        }
         g2.dispose();
     }
 }

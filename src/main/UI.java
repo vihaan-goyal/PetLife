@@ -3,6 +3,7 @@ package main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 
 import quest.Task;
 
@@ -111,7 +112,56 @@ public class UI {
 
         if(gp.gameState == gp.PLAY_STATE){
             drawHUD(g2);
+            g2.setFont(smallFont);
+            //g2.drawString("1: Wallet   2: Inventory   3: Tasks   4: Pet Stats", 20, 40);
+            g2.drawString("1 = Wallet" , 20, 40);
+            g2.drawString("2 = Inventory" , 20, 70);
+            g2.drawString("3 = Tasks" , 20, 100);
+            g2.drawString("4 = Pet Stats" , 20, 130);
+            g2.drawString("---------------", 20, 150);
+
         }
+    }
+
+    // ---------------- PET STATS ----------------
+
+    public void drawPetStats(Graphics2D g2){
+
+        // dark background
+        g2.setColor(new Color(232,169,97));
+        g2.fillRect(gp.screenWidth/4-5, gp.screenHeight/4+5, gp.screenWidth/2, gp.screenHeight/2);
+
+        // border
+        g2.setColor(new Color(115,83,47));
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRect(gp.screenWidth/4-5, gp.screenHeight/4+5, gp.screenWidth/2, gp.screenHeight/2);
+
+        g2.setColor(Color.WHITE);
+
+        int x = gp.tileSize * 8;
+        int y = gp.tileSize * 6;
+
+        g2.setFont(optionFont);
+        g2.drawString("Pet Status", x, y);
+
+        if(gp.petManager.currentPet != null){
+
+            y += gp.tileSize * 2;
+
+            g2.drawString("Hunger: " + gp.petManager.currentPet.hunger, x, y);
+
+            y += gp.tileSize;
+
+            g2.drawString("Happiness: " + gp.petManager.currentPet.happiness, x, y);
+
+            y += gp.tileSize;
+
+            g2.drawString("Energy: " + gp.petManager.currentPet.energy, x, y);
+        }
+
+        y += gp.tileSize * 2;
+
+        g2.drawString("Press P to close", x, y);
     }
 
     // ---------------- TITLE SCREEN ----------------
@@ -206,22 +256,9 @@ public class UI {
 
         //g2.drawString("Money: $" + gp.money, 20, 40);
 
-        if(gp.petManager.currentPet != null){
-
-            g2.drawString("Hunger: " + gp.petManager.currentPet.hunger, 20, 70);
-            g2.drawString("Happiness: " + gp.petManager.currentPet.happiness, 20, 100);
-            g2.drawString("Energy: " + gp.petManager.currentPet.energy, 20, 130);
-
-			
-        }
-
         g2.drawString("F = Feed ($5)", 20, 180);
         g2.drawString("P = Play ($10)", 20, 210);
         g2.drawString("R = Rest (Free)", 20, 240);
-		g2.drawString("I = Wallet", 20, 270);
-        g2.drawString("T = Tasks", 20, 300);
-        g2.drawString("E = Inventory", 20, 330);
-
 
         // message popup
         if(messageOn){
@@ -267,7 +304,7 @@ public class UI {
 
         y += gp.tileSize;
 
-        g2.drawString("Press E to close", x, y);
+        g2.drawString("Press 2 to close", x, y);
     }
 
     //DRAW TASKS
@@ -322,7 +359,7 @@ public class UI {
 
 		y += gp.tileSize;
 
-		g2.drawString("Press T to close", x, y);
+		g2.drawString("Press 3 to close", x, y);
 	}
 
 	public void drawWallet(Graphics2D g2){
@@ -343,7 +380,7 @@ public class UI {
 		int y = gp.tileSize * 6;
 
 		g2.setFont(optionFont);
-		g2.drawString("Financial Overview", x, y);
+		g2.drawString("Wallet", x, y);
 
 		y += gp.tileSize * 2;
 		g2.drawString("Current Savings: $" + gp.money, x, y);
@@ -358,6 +395,6 @@ public class UI {
 		g2.drawString("Vet Costs: $" + vetCosts, x, y);
 
 		y += gp.tileSize * 2;
-		g2.drawString("Press I to close", x, y);
+		g2.drawString("Press 1 to close", x, y);
 	}
 }

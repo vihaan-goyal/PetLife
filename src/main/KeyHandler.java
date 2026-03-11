@@ -12,6 +12,7 @@ public class KeyHandler implements KeyListener {
     public boolean enterPressed;
     public boolean taskPressed;
     public boolean inventoryPressed;
+    public boolean petStatsPressed;
 
     GamePanel gp;
 
@@ -50,15 +51,12 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_P) playPressed = true;
         if (code == KeyEvent.VK_R) restPressed = true;
 
-        if (code == KeyEvent.VK_1) onePressed = true;
-        if (code == KeyEvent.VK_2) twoPressed = true;
-        if (code == KeyEvent.VK_3) threePressed = true;
+        if(code == KeyEvent.VK_1) walletPressed = true;
+        if(code == KeyEvent.VK_2) inventoryPressed = true;
+        if(code == KeyEvent.VK_3) taskPressed = true;
+        if(code == KeyEvent.VK_4) petStatsPressed = true;
 
-        if(code == KeyEvent.VK_I) walletPressed = true;
 
-        if(code == KeyEvent.VK_T) taskPressed = true;
-
-        if(code == KeyEvent.VK_E) inventoryPressed = true;
 
         if(code == KeyEvent.VK_ENTER) {
 
@@ -91,17 +89,14 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_P) playPressed = false;
         if (code == KeyEvent.VK_R) restPressed = false;
 
-        if (code == KeyEvent.VK_1) onePressed = false;
-        if (code == KeyEvent.VK_2) twoPressed = false;
-        if (code == KeyEvent.VK_3) threePressed = false;
-
-        if(code == KeyEvent.VK_I) walletPressed = false;
-
         if(code == KeyEvent.VK_ENTER) enterPressed = false;
 
-        if(code == KeyEvent.VK_T) taskPressed = false;
+         if(code == KeyEvent.VK_1) walletPressed = false;
+        if(code == KeyEvent.VK_2) inventoryPressed = false;
+        if(code == KeyEvent.VK_3) taskPressed = false;
+        if(code == KeyEvent.VK_4) petStatsPressed = false;
 
-        if(code == KeyEvent.VK_E) inventoryPressed = false;
+        
             
     }
 
