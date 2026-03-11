@@ -161,7 +161,7 @@ public class UI {
 
         y += gp.tileSize * 2;
 
-        g2.drawString("Press P to close", x, y);
+        g2.drawString("Press 4 to close", x, y);
     }
 
     // ---------------- TITLE SCREEN ----------------
