@@ -11,9 +11,6 @@ import main.GamePanel;
 import main.KeyHandler;
 import main.UtilityTool;
 
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.Graphics2D;
 
 public class Player extends Entity {
 
@@ -83,6 +80,7 @@ public class Player extends Entity {
     }
 
     public void Update() {
+        gp.petManager.currentPet.happinessDecay = 3; 
 
 
         if(keyH.enterPressed){
@@ -119,17 +117,11 @@ public class Player extends Entity {
         
         if(playerInPark && petInPark){
 
+            gp.petManager.currentPet.happinessDecay = 0;
+
             parkTimer++;
-            System.out.println("Timer: " + parkTimer);
-
             if(parkTimer >= 60){
-                pet.happiness += 3;
-
-                if(pet.happiness > 100){
-                    pet.happiness = 100;
-                }
-
-                System.out.println("Happiness increased!");
+                gp.petManager.currentPet.happiness = Math.min(100, gp.petManager.currentPet.happiness + 3);
                 parkTimer = 0;
             }
 

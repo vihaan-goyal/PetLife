@@ -19,9 +19,9 @@ public class Pet extends Entity {
     public String petType = "dog";
 
     
-    public int hunger = 100;
-    public int happiness = 50;
-    public int energy = 100;
+    public int hunger = 75;
+    public int happiness = 75;
+    public int energy = 75;
 
     public String mood = "Happy";
 
