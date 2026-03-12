@@ -3,12 +3,15 @@ package main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-
-import finance.Transaction;
-
 import java.awt.BasicStroke;
 
+import finance.Transaction;
 import quest.Task;
+
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
 
 public class UI {
 
@@ -18,6 +21,10 @@ public class UI {
     Font optionFont;
     Font smallFont;
     Font menuFont;
+
+    BufferedImage hungerIcon;
+    BufferedImage happinessIcon;
+    BufferedImage energyIcon;
 
     // pet button positions
     public int dogX, dogY;
@@ -51,6 +58,14 @@ public class UI {
         menuFont = new Font("Segoe UI", Font.BOLD, 50);
         optionFont = new Font("Segoe UI", Font.PLAIN, 36);
         smallFont = new Font("Segoe UI", Font.PLAIN, 20);
+
+        try {
+            hungerIcon = ImageIO.read(getClass().getResource("/icons/hunger.png"));
+            happinessIcon = ImageIO.read(getClass().getResource("/icons/happiness.png"));
+            energyIcon = ImageIO.read(getClass().getResource("/icons/energy.png"));
+        } catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void showMessage(String text){
@@ -143,11 +158,11 @@ public class UI {
 
         g2.setColor(Color.WHITE);
 
-        int x = gp.tileSize * 8;
+        int x = gp.tileSize * 9;
         int y = gp.tileSize * 6;
 
         g2.setFont(menuFont);
-        g2.drawString("Pet Status", x, y);
+        g2.drawString("Pet Status", x - gp.tileSize, y);
 
         g2.setFont(optionFont);
         if(gp.petManager.currentPet != null){
@@ -160,7 +175,8 @@ public class UI {
 
             // HUNGER
             y += gp.tileSize * 2;
-            g2.drawString("Hunger: ", x, y);
+            g2.drawImage(hungerIcon, x - 40, y - 30, 32, 32, null);
+            g2.drawString("Hunger:", x, y);
 
             g2.setColor(Color.DARK_GRAY);
             g2.fillRect(barX-20, y-20, barWidth, barHeight);
@@ -175,6 +191,7 @@ public class UI {
             // HAPPINESS
             y += gp.tileSize;
             g2.setColor(Color.WHITE);
+            g2.drawImage(happinessIcon, x - 40, y - 30, 32, 32, null);
             g2.drawString("Happiness:", x, y);
 
             g2.setColor(Color.DARK_GRAY);
@@ -190,7 +207,8 @@ public class UI {
             // ENERGY
             y += gp.tileSize;
             g2.setColor(Color.WHITE);
-            g2.drawString("Energy: ", x, y);
+            g2.drawImage(energyIcon, x - 40, y - 30, 32, 32, null);
+            g2.drawString("Energy:", x, y);
 
             g2.setColor(Color.DARK_GRAY);
             g2.fillRect(barX-30, y-20, barWidth, barHeight);
