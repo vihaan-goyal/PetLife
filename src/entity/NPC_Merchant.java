@@ -15,6 +15,7 @@ import java.awt.Font;
 public class NPC_Merchant extends Entity {
 
     GamePanel gp;
+    public int dialogueStage = 0;
 
     public NPC_Merchant(GamePanel gp) {
         this.gp = gp;
@@ -49,34 +50,47 @@ public class NPC_Merchant extends Entity {
 
     @Override
     public void interact() {
+
         gp.ui.speaker = "Merchant";
 
+        // FIRST TIME talking
+        if(dialogueStage == 0){
 
-        if(gp.money >= 10) {
+            gp.ui.startDialogue(new String[]{
+                "Welcome to my pet shop!",
+                "Fresh pet food for only $10.",
+                "Come back anytime if your pet gets hungry."
+            });
+
+            dialogueStage = 1;
+            return;
+        }
+
+        // AFTER FIRST TIME → try to buy food
+        if(gp.money >= 10){
 
             gp.wallet.addTransaction("Pet Food", -10);
             gp.money -= 10;
             gp.ui.foodCosts += 10;
             gp.totalSpent += 10;
             gp.inventoryManager.addItem("food", 1);
+
             gp.ui.startDialogue(new String[]{
-                "Welcome to my pet shop!",
-                "Fresh pet food for only $10.",
-                "Your pet will love it!"
+                "Here you go!",
+                "One fresh bag of pet food."
             });
 
         } 
         else {
 
-
             gp.ui.startDialogue(new String[]{
-                "Welcome to my pet shop!",
                 "Pet food costs $10.",
-                "Come back when you have enough money!"
+                "Come back when you have enough money."
             });
 
         }
     }
+
 
     public void draw(Graphics2D g2, GamePanel gp) {
 

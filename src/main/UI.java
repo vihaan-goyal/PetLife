@@ -300,7 +300,7 @@ public class UI {
 
         g2.drawString("F = Feed", 20, 180);
         g2.drawString("P = Play ($10)", 20, 210);
-        g2.drawString("R = Rest (Fee)", 20, 240);
+        g2.drawString("R = Rest (Free)", 20, 240);
 
         // message popup
         if(messageOn){
@@ -343,9 +343,9 @@ public class UI {
         y += gp.tileSize * 2;
 
         int foodCount = gp.inventoryManager.getItemCount("food");
-        g2.drawString("Pet Food: " + foodCount, x, y);
+        g2.drawString("Bags of Pet Food: " + foodCount, x, y);
 
-        y += gp.tileSize;
+        y += gp.tileSize * 2;
 
         g2.drawString("Press 2 to close", x, y);
     }
