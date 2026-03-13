@@ -9,7 +9,7 @@ public class Main {
 		window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(true);
-		window.setTitle("Virtual Pet Simulator");
+		window.setTitle("PetLife");
 		
 		GamePanel gamePanel = new GamePanel();
 		window.add(gamePanel);

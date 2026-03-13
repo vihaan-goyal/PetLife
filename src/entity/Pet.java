@@ -18,7 +18,6 @@ public class Pet extends Entity {
     public String name = "Pet";
     public String petType = "dog";
 
-    
     public int hunger = 75;
     public int happiness = 75;
     public int energy = 75;
@@ -35,12 +34,16 @@ public class Pet extends Entity {
 
     int statTimer = 0;
 
-
     int directionTimer = 0;
     int directionDelay = 10; // frames before sprite can change
     String lastDirection = "down";
 
-    
+    public boolean sick = false;
+
+    int sicknessTimer = 0;
+
+    int gameTime = 0;
+
 
     GamePanel gp;
 
@@ -72,12 +75,15 @@ public class Pet extends Entity {
     public void updateStats() {
 
         statTimer++;
+        gameTime++;
+        sicknessTimer++;
 
         if(statTimer > 300) { // every ~5 seconds
 
             hunger -= hungerDecay;
             happiness -= happinessDecay;
             energy -= energyDecay;
+
 
             clampStats();
             checkHealth();
@@ -138,8 +144,14 @@ public class Pet extends Entity {
         happiness += 5;
         clampStats();
         updateMood();
-        if(mood.equals("Happy")){
-            gp.ui.showMessage(name + " loved the food!");
+        double chance = Math.random();
+
+        if(chance < 0.1) {  
+            sick = true;
+            gp.ui.showMessage(name.toUpperCase() + " got sick from the food!");
+        }
+        else if(mood.equals("Happy")){
+            gp.ui.showMessage(name.toUpperCase() + " loved the food!");
         }
     }
 
@@ -183,6 +195,21 @@ public class Pet extends Entity {
         updateStats();
         updateBehavior();
 
+        if(gameTime > 1200) {
+
+            sicknessTimer++;
+
+            if(sicknessTimer > 600) {
+                sicknessTimer = 0;
+
+                if(!sick && Math.random() < 0.05) {
+                    sick = true;
+
+                    gp.ui.showMessage("Oh no, your pet suddenly got sick!");
+                }
+            }
+        }
+
         int dx = gp.player.worldX - worldX;
         int dy = gp.player.worldY - worldY;
 
@@ -203,8 +230,11 @@ public class Pet extends Entity {
             secondaryDir = (dx > 0) ? "right" : "left";
         }
 
-        //direction = primaryDir;
-
+        if(sick) {
+            speed = 1;
+        } else {
+            speed = 3; // normal speed
+        }
         
 
         if(!primaryDir.equals(lastDirection)) {
@@ -300,6 +330,20 @@ public class Pet extends Entity {
 
         // draw pet sprite
         g2.drawImage(image, screenX, screenY, null);
+
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+        if(sick){
+            g2.setColor(new Color(0,255,0,80)); // green tint
+            g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);
+        }
+
+        g2.setFont(new Font("Arial", Font.BOLD, 12));
+
+        if(sick){
+            g2.setColor(Color.RED);
+            g2.drawString("Sick", screenX + 15, screenY - 40);
+        }
 
 
         // ---------- NAME TAG ----------

@@ -107,7 +107,6 @@ public class NPC_OldMan extends Entity {
                 ));
 
 
-
                 gp.wallet.addTransaction("Quest Reward", 50);
                 gp.money += 50;
 
@@ -130,14 +129,22 @@ public class NPC_OldMan extends Entity {
                 gp.ui.startDialogue(new String[]{
                     "Excellent work!",
                     "You're becoming a pro at taking care of your pet!",
-                    "Your Dad will sure be happy!"
+                    "Your Dad will sure be happy!",
+                    "I've given you one last task."
                 });
 
                 gp.wallet.addTransaction("Quest Reward", 50);
                 gp.money += 50;
 
+                questStage = 3;
+                
+                gp.taskManager.addTask(new Task(
+                    "Vaccinate Your Pet",
+                    "Take your pet to the veterinarian",
+                    21 * gp.tileSize,
+                    30 * gp.tileSize
+                ));
 
-                questStage = 2;
             }
             else{
 
@@ -147,8 +154,14 @@ public class NPC_OldMan extends Entity {
                 });
             }
 
-        }
 
+        }
+        else if (questStage == 3){
+             gp.ui.startDialogue(new String[]{
+                    "You have proven to be a great pet owner.",
+                    "Have fun with your pet!"
+                });
+        }
     }
 
     public void draw(Graphics2D g2) {

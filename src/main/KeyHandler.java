@@ -50,6 +50,7 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_F) feedPressed = true;
         if (code == KeyEvent.VK_P) playPressed = true;
         if (code == KeyEvent.VK_R) restPressed = true;
+        if(code == KeyEvent.VK_M) gp.player.useMedicine();
 
         if(code == KeyEvent.VK_1) walletPressed = true;
         if(code == KeyEvent.VK_2) inventoryPressed = true;

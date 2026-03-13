@@ -102,7 +102,6 @@ public class Player extends Entity {
                 }
             }
         }
-
         
 
         Rectangle playerRect = new Rectangle(worldX, worldY, gp.tileSize, gp.tileSize);
@@ -197,6 +196,29 @@ public class Player extends Entity {
         int objIndex = gp.cChecker.checkObject(this, true);
         pickUpObject(objIndex);
 
+    }
+
+    public void useMedicine() {
+
+        if(gp.inventoryManager.getItemCount("medicine") > 0) {
+
+            if(gp.petManager.currentPet.sick) {
+
+
+                gp.petManager.currentPet.sick = false;
+
+                gp.inventoryManager.removeItem("medicine", 1);
+
+                gp.ui.showMessage("Your pet feels much better!");
+
+            } else {
+
+               gp.ui.showMessage("Your dog isn't sick right now!");
+
+            }
+        } else {
+            gp.ui.showMessage("You don't have any medicine.");
+        }
     }
 
     public void pickUpObject(int i) {

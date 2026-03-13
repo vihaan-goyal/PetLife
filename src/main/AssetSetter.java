@@ -3,6 +3,7 @@ package main;
 import object.OBJ_Chest;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
+import entity.NPC_Veterinarian;
 
 
 public class AssetSetter {
@@ -16,12 +17,16 @@ public class AssetSetter {
 	public void setNPC() {
 
 		gp.npc[0] = new NPC_OldMan(gp);
-		gp.npc[0].worldX = gp.tileSize * 33;
-		gp.npc[0].worldY = gp.tileSize * 19;
+		gp.npc[0].worldX = gp.tileSize * 32;
+		gp.npc[0].worldY = gp.tileSize * 23;
 
 		gp.npc[1] = new NPC_Merchant(gp);
 		gp.npc[1].worldX = 26 * gp.tileSize;
 		gp.npc[1].worldY = 34 * gp.tileSize;
+
+		gp.npc[2] = new NPC_Veterinarian(gp);
+		gp.npc[2].worldX = gp.tileSize * 20;
+		gp.npc[2].worldY = gp.tileSize * 25;
 
 	}
 	

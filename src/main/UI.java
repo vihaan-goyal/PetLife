@@ -218,9 +218,22 @@ public class UI {
 
             g2.setColor(Color.BLACK);
             g2.drawRect(barX-30, y-20, barWidth, barHeight);
+
+            g2.setColor(Color.WHITE);
+            g2.drawString("Status: ", x, y + gp.tileSize);
+
+
+            if(pet.sick){
+                g2.setColor(Color.RED);
+                g2.drawString("Sick", x + 110, y + gp.tileSize);
+            }
+            else{
+                g2.setColor(Color.GREEN);
+                g2.drawString("Healthy", x + 110, y + gp.tileSize);
+            }
         }
 
-        y += gp.tileSize * 2;
+        y += gp.tileSize * 3;
 
         g2.setColor(Color.WHITE);
         g2.drawString("Press 4 to close", x, y);
@@ -237,7 +250,7 @@ public class UI {
         // TITLE
         g2.setFont(titleFont);
 
-        String title = "Tung Tung Pet";
+        String title = "PetLife";
 
         int titleX = gp.screenWidth/2 - g2.getFontMetrics().stringWidth(title)/2;
 
@@ -319,6 +332,7 @@ public class UI {
         g2.drawString("F = Feed", 20, 180);
         g2.drawString("P = Play ($10)", 20, 210);
         g2.drawString("R = Rest (Free)", 20, 240);
+        g2.drawString("M = Medicine", 20, 270);
 
         // message popup
         if(messageOn){
@@ -363,7 +377,11 @@ public class UI {
         int foodCount = gp.inventoryManager.getItemCount("food");
         g2.drawString("Bags of Pet Food: " + foodCount, x, y);
 
-        y += gp.tileSize * 2;
+        int medicineCount = gp.inventoryManager.getItemCount("medicine");
+
+        g2.drawString("Medicine: " + medicineCount, x, y + gp.tileSize);
+
+        y += gp.tileSize * 4;
 
         g2.drawString("Press 2 to close", x, y);
     }

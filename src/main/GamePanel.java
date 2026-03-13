@@ -228,8 +228,6 @@ public class GamePanel extends JPanel implements Runnable {
 
                         pet.feed();
                       
-
-
                     } else {
 
                         ui.showMessage("You have no pet food!");
