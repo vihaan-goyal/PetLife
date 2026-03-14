@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
+import java.awt.FontMetrics;
 
 import finance.Transaction;
 import quest.Task;
@@ -374,7 +375,17 @@ public class UI {
             hoveredPet = 2;
         }
 
+
+        FontMetrics fm = g2.getFontMetrics();
+
+        int textWidth = fm.stringWidth("Dog");
+
+        int x = panelX + panelWidth/2 - textWidth/2;
+        int y = panelY-10;
+
         if(hoveredPet == 0){
+            g2.setColor(Color.white);
+            g2.drawString("Dog", x, y);
             preview = dogImage;
             stats = new String[]{
                 "Loyal and energetic",
@@ -384,6 +395,11 @@ public class UI {
         }
 
         else if(hoveredPet == 1){
+            textWidth = fm.stringWidth("Cat");
+            x = panelX + panelWidth/2 - textWidth/2;
+
+            g2.setColor(Color.white);
+            g2.drawString("Cat", x, y);
             preview = catImage;
             stats = new String[]{
                 "Independent",
@@ -393,6 +409,11 @@ public class UI {
         }
 
         else if(hoveredPet == 2){
+            textWidth = fm.stringWidth("Koala");
+            x = panelX + panelWidth/2 - textWidth/2;
+            
+            g2.setColor(Color.white);
+            g2.drawString("Koala", x, y);
             preview = koalaImage;
             stats = new String[]{
                 "Very sleepy",
@@ -420,8 +441,8 @@ public class UI {
         int textY = panelY + 170;
 
         for(String s : stats){
-            int textWidth = (int)g2.getFontMetrics().getStringBounds(s, g2).getWidth();
-            int textX = panelX + (panelWidth - textWidth)/2;
+            int tW = (int)g2.getFontMetrics().getStringBounds(s, g2).getWidth();
+            int textX = panelX + (panelWidth - tW)/2;
 
             g2.setColor(Color.WHITE);
             g2.drawString(s, textX, textY);
