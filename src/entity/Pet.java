@@ -20,7 +20,7 @@ public class Pet extends Entity {
 
     public int hunger = 75;
     public int happiness = 75;
-    public int energy = 75;
+    public int energy = 0;
 
     public String mood = "Happy";
 
@@ -43,6 +43,15 @@ public class Pet extends Entity {
     int sicknessTimer = 0;
 
     int gameTime = 0;
+
+    int oldX = worldX;
+    int oldY = worldY;
+
+    public int returnX;
+    public int returnY;
+
+    public boolean resting = false;
+    public int restTimer = 0;
 
 
     GamePanel gp;
@@ -188,6 +197,22 @@ public class Pet extends Entity {
         }
     }
 
+    // ---------- RESTING MECHANIC ----------
+
+    public void restOnBed(int bedX, int bedY){
+
+        // save original position
+        returnX = worldX;
+        returnY = worldY;
+
+        // teleport onto bed
+        worldX = bedX;
+        worldY = bedY;
+
+        resting = true;
+        restTimer = 180; // 3 seconds
+    }
+
     // ---------- PET AI FOLLOW ----------
 
     public void update() {
@@ -195,14 +220,15 @@ public class Pet extends Entity {
         updateStats();
         updateBehavior();
 
-        if(gameTime > 1200) {
+
+        if(gameTime > 2400) { //change to 2400 for 20 seconds
 
             sicknessTimer++;
 
             if(sicknessTimer > 600) {
                 sicknessTimer = 0;
 
-                if(!sick && Math.random() < 0.05) {
+                if(!sick && Math.random() < 0.10) {
                     sick = true;
 
                     gp.ui.showMessage("Oh no, your pet suddenly got sick!");
@@ -235,7 +261,23 @@ public class Pet extends Entity {
         } else {
             speed = 3; // normal speed
         }
-        
+        if(resting){
+
+            restTimer--;
+
+            if(restTimer <= 0){
+
+                resting = false;
+
+                // go back to original position
+                worldX = returnX;
+                worldY = returnY;
+
+                energy += 30;
+            }
+
+            return; // stop normal movement while resting
+        }
 
         if(!primaryDir.equals(lastDirection)) {
             directionTimer++;

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class ChatGPTGrader {
 
-    static String API_KEY = "YOUR_API_KEY_HERE";
+    static String API_KEY = "YOUR_KEY_HERE";
     public static int grade(String question, String answer){
 
         try{

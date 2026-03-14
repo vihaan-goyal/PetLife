@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, leftPressed, rightPressed;
-    public boolean feedPressed, playPressed, restPressed;
+    public boolean feedPressed, playPressed;
     public boolean onePressed, twoPressed, threePressed;
     public boolean walletPressed;
     public boolean enterPressed;
@@ -103,7 +103,6 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_F) feedPressed = true;
         if (code == KeyEvent.VK_P) playPressed = true;
-        if (code == KeyEvent.VK_R) restPressed = true;
         if(code == KeyEvent.VK_M) gp.player.useMedicine();
 
         if(code == KeyEvent.VK_1) walletPressed = true;
@@ -126,8 +125,6 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_F) feedPressed = false;
         if (code == KeyEvent.VK_P) playPressed = false;
-        if (code == KeyEvent.VK_R) restPressed = false;
-
         if(code == KeyEvent.VK_ENTER) enterPressed = false;
 
          if(code == KeyEvent.VK_1) walletPressed = false;

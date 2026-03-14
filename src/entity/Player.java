@@ -234,6 +234,33 @@ public class Player extends Entity {
                 gp.ui.showMessage("+$" + mon + " from chest!");
                 gp.obj[i] = null;
             }
+            else if(objectName.equals("Bed")) {
+                if(gp.obj[i].description.equals("topLeft")){
+                    gp.petManager.currentPet.restOnBed(
+                        gp.obj[i].worldX + gp.tileSize/2,
+                        gp.obj[i].worldY + gp.tileSize/2
+                    );
+                }   
+                else if(gp.obj[i].description.equals("topRight")){
+                    gp.petManager.currentPet.restOnBed(
+                        gp.obj[i].worldX - gp.tileSize/2,
+                        gp.obj[i].worldY + gp.tileSize/2
+                    );
+                }
+                else if(gp.obj[i].description.equals("bottomLeft")){
+                    gp.petManager.currentPet.restOnBed(
+                        gp.obj[i].worldX + gp.tileSize/2,
+                        gp.obj[i].worldY - gp.tileSize/2
+                    );
+                }
+                else if(gp.obj[i].description.equals("bottomRight")){
+                    gp.petManager.currentPet.restOnBed(
+                        gp.obj[i].worldX - gp.tileSize/2,
+                        gp.obj[i].worldY - gp.tileSize/2
+                    );
+                }
+
+            }
         }
     }
 

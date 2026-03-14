@@ -247,12 +247,6 @@ public class GamePanel extends JPanel implements Runnable {
                     totalSpent += 10;
                     keyH.playPressed = false;
                 }
-
-                // REST
-                if (keyH.restPressed) {
-                    pet.rest();
-                    keyH.restPressed = false;
-                }
             }
 
             updateClock();

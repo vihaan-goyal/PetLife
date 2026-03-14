@@ -1,5 +1,6 @@
 package main;
 
+import object.OBJ_Bed;
 import object.OBJ_Chest;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
@@ -53,5 +54,31 @@ public class AssetSetter {
 		gp.obj[3] = new OBJ_Chest(gp);
 		gp.obj[3].worldX = 50 * gp.tileSize;
 		gp.obj[3].worldY = 15 * gp.tileSize;
+
+		// BED (2x2)
+
+		gp.obj[4] = new OBJ_Bed(gp);
+		gp.obj[4].worldX = 30 * gp.tileSize;
+		gp.obj[4].worldY = 10 * gp.tileSize;
+		gp.obj[4].description = "topLeft";
+
+		gp.obj[5] = new OBJ_Bed(gp);
+		gp.obj[5].worldX = 31 * gp.tileSize;
+		gp.obj[5].worldY = 10 * gp.tileSize;
+		gp.obj[5].flipX = true;
+		gp.obj[5].description = "topRight";
+
+		gp.obj[6] = new OBJ_Bed(gp);
+		gp.obj[6].worldX = 30 * gp.tileSize;
+		gp.obj[6].worldY = 11 * gp.tileSize;
+		gp.obj[6].flipY = true;
+		gp.obj[6].description = "bottomLeft";
+
+		gp.obj[7] = new OBJ_Bed(gp);
+		gp.obj[7].worldX = 31 * gp.tileSize;
+		gp.obj[7].worldY = 11 * gp.tileSize;
+		gp.obj[7].flipX = true;
+		gp.obj[7].flipY = true;
+		gp.obj[7].description = "bottomRight";
 	}
 }
