@@ -10,6 +10,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import java.awt.Color;
+import java.awt.Font; 
+
 public class NPC_QuizMaster extends Entity {
 
     GamePanel gp;
@@ -43,7 +46,7 @@ public class NPC_QuizMaster extends Entity {
         gp.quizManager.startQuiz();
     }
 
-    public void draw(Graphics2D g2){
+    public void draw(Graphics2D g2, GamePanel gp){
 
         BufferedImage image = down1;
 
@@ -51,5 +54,9 @@ public class NPC_QuizMaster extends Entity {
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
         g2.drawImage(image, screenX, screenY, null);
+
+        g2.setFont(new Font("Arial", Font.BOLD, 14));
+        g2.setColor(Color.WHITE);
+        g2.drawString("Quizzard", screenX - 10, screenY - 10);
     }
 }

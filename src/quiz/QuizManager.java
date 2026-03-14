@@ -73,7 +73,6 @@ public class QuizManager {
             gp.ui.startDialogue(new String[]{
                 "Hmm...",
                 "Your answer score: " + score + "/100",
-                reason,
                 "You earned $" + reward + "!"
             });
 }

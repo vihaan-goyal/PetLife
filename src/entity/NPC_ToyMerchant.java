@@ -28,7 +28,7 @@ public class NPC_ToyMerchant extends Entity {
 
     public void getImage() {
 
-        down1 = setup("merchant_down_1"); // reuse same sprite
+        down1 = setup("toyMerchant"); // reuse same sprite
     }
 
     public BufferedImage setup(String imageName) {
@@ -103,6 +103,6 @@ public class NPC_ToyMerchant extends Entity {
 
         g2.setFont(new Font("Arial", Font.BOLD, 14));
         g2.setColor(Color.WHITE);
-        g2.drawString("Toy Store", screenX - 10, screenY - 5);
+        g2.drawString("Toy Merchant", screenX - 10, screenY - 5);
     }
 }

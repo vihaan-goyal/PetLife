@@ -10,6 +10,9 @@ import main.GamePanel;
 import main.UtilityTool;
 import quest.Task;
 
+import java.awt.Color;
+import java.awt.Font; 
+
 public class NPC_OldMan extends Entity {
 
     GamePanel gp;
@@ -165,7 +168,7 @@ public class NPC_OldMan extends Entity {
         }
     }
 
-    public void draw(Graphics2D g2) {
+    public void draw(Graphics2D g2, GamePanel gp) {
 
         BufferedImage image = down1;
 
@@ -173,6 +176,10 @@ public class NPC_OldMan extends Entity {
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
         g2.drawImage(image, screenX, screenY, null);
+
+        g2.setFont(new Font("Arial", Font.BOLD, 14));
+        g2.setColor(Color.WHITE);
+        g2.drawString("Wiseman", screenX - 10, screenY - 5);
 
     }
 
