@@ -158,7 +158,7 @@ public class Pet extends Entity {
         updateMood();
         double chance = Math.random();
 
-        if(chance < 0.10) {  
+        if(chance < 0.10 && ((NPC_OldMan) gp.npc[0]).questStage >= 1) {  
             sick = true;
             gp.ui.showMessage(name.toUpperCase() + " got sick from the food!");
         }
