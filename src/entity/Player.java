@@ -91,6 +91,7 @@ public class Player extends Entity {
                 gp.petManager.currentPet.happiness =
                     Math.min(100, gp.petManager.currentPet.happiness + 10);
 
+                gp.inventoryManager.removeItem("toy", 1);
                 gp.ui.showMessage("You played with your pet!");
 
             } else {

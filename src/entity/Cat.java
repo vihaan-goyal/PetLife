@@ -11,8 +11,8 @@ public class Cat extends Pet {
     public Cat(GamePanel gp) {
         super(gp);
 
-        hungerDecay = 3;
-        happinessDecay = 1;
+        hungerDecay = 1;
+        happinessDecay = 3;
         energyDecay = 1;
     }
 

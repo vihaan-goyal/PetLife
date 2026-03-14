@@ -128,7 +128,7 @@ public class NPC_OldMan extends Entity {
                     "Excellent work!",
                     "You're becoming a pro at taking care of your pet!",
                     "Your Dad will sure be happy!",
-                    "I've given you one last task."
+                    "I've given you 3 more tasks."
                 });
 
                 gp.wallet.addTransaction("Quest Reward", 50);
@@ -137,10 +137,22 @@ public class NPC_OldMan extends Entity {
                 questStage = 3;
                 
                 gp.taskManager.addTask(new Task(
-                    "Vaccinate Your Pet",
+                    "Visit the Vet",
                     "Take your pet to the veterinarian",
                     35 * gp.tileSize,
                     45 * gp.tileSize
+                ));
+                gp.taskManager.addTask(new Task(
+                    "Visit the Toy Shop",
+                    "Buy a pet for your fog",
+                    45 * gp.tileSize,
+                    41 * gp.tileSize
+                ));
+                gp.taskManager.addTask(new Task(
+                    "Visit Your Home",
+                    "Take your pet to your house",
+                    35 * gp.tileSize,
+                    15 * gp.tileSize
                 ));
 
             }

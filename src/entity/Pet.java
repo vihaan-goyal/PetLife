@@ -18,9 +18,9 @@ public class Pet extends Entity {
     public String name = "Pet";
     public String petType = "dog";
 
-    public int hunger = 75;
-    public int happiness = 75;
-    public int energy = 75;
+    public int hunger = 100;
+    public int happiness = 100;
+    public int energy = 100;
 
     public String mood = "Happy";
 
@@ -28,9 +28,9 @@ public class Pet extends Entity {
     public boolean isSick = false;
 
     // stat decay rates
-    public int hungerDecay = 1;
-    public int happinessDecay = 1;
-    public int energyDecay = 1;
+    public int hungerDecay = 2;
+    public int happinessDecay = 2;
+    public int energyDecay = 2;
 
     int statTimer = 0;
 
@@ -154,7 +154,7 @@ public class Pet extends Entity {
     public void feed() {
         hunger += 20;
         happiness += 5;
-        energy += 10;
+        energy += 5;
         clampStats();
         updateMood();
         double chance = Math.random();
