@@ -21,6 +21,7 @@ public class QuizManager {
     }
 
     public void startQuiz(){
+        gp.ui.speaker = "Quizzard";
         if(gp.ui.typingMode) return;
 
         long now = System.currentTimeMillis();

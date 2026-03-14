@@ -104,7 +104,16 @@ public class UI {
 		int textX = boxX + 20;
 		int textY = boxY + 50;
 
-		g2.drawString(speaker + ": " + text, textX, textY);
+		// draw speaker (bold)
+        g2.setFont(optionFont.deriveFont(Font.BOLD));
+        g2.drawString(speaker + ":", textX, textY);
+
+        // measure width of speaker text
+        int speakerWidth = g2.getFontMetrics().stringWidth(speaker + ":");
+
+        // draw dialogue (normal)
+        g2.setFont(optionFont);
+        g2.drawString(" " + text, textX + speakerWidth, textY);
 	}
 
 	
