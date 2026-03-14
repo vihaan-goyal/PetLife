@@ -19,10 +19,13 @@ import inventory.InventoryManager;
 import finance.WalletManager;
 import java.awt.Rectangle;
 
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseEvent;
 
 
 
-public class GamePanel extends JPanel implements Runnable {
+
+public class GamePanel extends JPanel implements Runnable, MouseMotionListener {
 
     // SCREEN SETTINGS
     final int originalTileSizes = 16;
@@ -114,6 +117,18 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.setFocusable(true);
         this.addMouseListener(mouseH);
+        this.addMouseMotionListener(this);
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        ui.mouseX = e.getX();
+        ui.mouseY = e.getY();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        //empty
     }
 
 	public void updateClock() {

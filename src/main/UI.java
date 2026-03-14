@@ -22,6 +22,7 @@ public class UI {
     Font smallFont;
     Font popupFont;
     Font menuFont;
+    Font subtitleFont;
 
     BufferedImage hungerIcon;
     BufferedImage happinessIcon;
@@ -32,7 +33,7 @@ public class UI {
     public int catX, catY;
     public int koalaX, koalaY;
 
-    public int buttonWidth = 450;
+    public int buttonWidth = 200;
     public int buttonHeight = 50;
 
     // message system
@@ -54,12 +55,20 @@ public class UI {
     //quiz system
     public boolean typingMode = false;
     public String currentInput = "";
+
+    //title page
+    public int hoveredPet = -1;
+    public int mouseX;
+    public int mouseY;
+
+    
 	
     public UI(GamePanel gp){
         this.gp = gp;
 
         titleFont = new Font("Segoe UI", Font.BOLD, 80);
         menuFont = new Font("Segoe UI", Font.BOLD, 50);
+        subtitleFont = new Font("Segoe UI", Font.HANGING_BASELINE, 36);
         optionFont = new Font("Segoe UI", Font.PLAIN, 36);
         popupFont = new Font("Segoe UI", Font.BOLD, 25);
         smallFont = new Font("Segoe UI", Font.PLAIN, 20);
@@ -148,23 +157,29 @@ public class UI {
 		}
 
 
-
         if(gp.gameState == gp.TITLE_STATE){
             drawTitleScreen(g2);
         }
 
-        
         if(typingMode){
+
+            int boxX = gp.tileSize;
+            int boxY = gp.screenHeight - gp.tileSize * 4;
+            int boxWidth = gp.screenWidth - gp.tileSize * 2;
+            int boxHeight = gp.tileSize * 2;
+
             g2.setColor(new Color(0,0,0,200));
-            g2.fillRect(gp.tileSize,
-                        gp.screenHeight - gp.tileSize*4+10,
-                        gp.screenWidth - gp.tileSize*3,
-                        gp.tileSize);
+		    g2.fillRoundRect(boxX, boxY, boxWidth, boxHeight, 25,25);
+
+		    // border
+		    g2.setColor(Color.WHITE);
+		    g2.setStroke(new java.awt.BasicStroke(4));
+		    g2.drawRoundRect(boxX, boxY, boxWidth, boxHeight, 25,25);
 
             g2.setColor(Color.WHITE);
             g2.setFont(optionFont);
-            g2.drawString("Answer: " + currentInput,
-                        gp.tileSize,
+            g2.drawString("Answer: " + currentInput + "_",
+                        gp.tileSize + 10,
                         gp.screenHeight - gp.tileSize * 3);
         }
     }
@@ -269,8 +284,22 @@ public class UI {
 
     public void drawTitleScreen(Graphics2D g2){
 
-        // background
-        g2.setColor(new Color(40,40,200));
+        //background
+        BufferedImage grassBackground = null;
+        try{
+            grassBackground = ImageIO.read(getClass().getResource("/tiles/grass.png"));
+        }
+        catch(IOException e){
+            System.out.println(e.getStackTrace());
+        }
+        UtilityTool uTool = new UtilityTool();
+        grassBackground = uTool.scaleImage(grassBackground, gp.tileSize, gp.tileSize);
+        for(int x = 0; x < gp.screenWidth; x += gp.tileSize){
+            for(int y = 0; y < gp.screenHeight; y += gp.tileSize){
+                g2.drawImage(grassBackground, x, y, null);
+            }
+        }
+        g2.setColor(new Color(0,0,0,120));
         g2.fillRect(0,0,gp.screenWidth,gp.screenHeight);
 
         // TITLE
@@ -287,7 +316,7 @@ public class UI {
         g2.drawString(title, titleX, 140);
 
         // subtitle
-        g2.setFont(optionFont);
+        g2.setFont(subtitleFont);
 
         String choose = "Choose Your Pet";
 
@@ -295,41 +324,143 @@ public class UI {
 
         g2.drawString(choose, chooseX, 240);
 
-        // ---------------- PET BUTTONS ----------------
+        // ---------------- 
+        BufferedImage dogImage = null;
+        BufferedImage catImage = null;
+        BufferedImage koalaImage = null;
+
+
+        g2.setFont(optionFont);
+        try {
+
+            dogImage = ImageIO.read(getClass().getResource("/pet/dog_down_1.png"));
+            catImage = ImageIO.read(getClass().getResource("/pet/cat_down_1.png"));
+            koalaImage = ImageIO.read(getClass().getResource("/pet/koala_down_1.png"));
+
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+        dogImage = uTool.scaleImage(dogImage, 300, 300);
+        catImage = uTool.scaleImage(catImage, 300, 300);
+        koalaImage = uTool.scaleImage(koalaImage, 300, 300);
+
+        int panelX = gp.screenWidth/2+40;
+        int panelY = 300;
+        int panelWidth = 220;
+        int panelHeight = 300;
+ 
+
+        g2.setColor(new Color(0,0,0,90));
+        g2.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 30, 30);
+
+        BufferedImage preview = null;
+        String[] stats = null;
+
+        hoveredPet = -1;
+
+        if(mouseX > dogX && mouseX < dogX + buttonWidth &&
+        mouseY > dogY && mouseY < dogY + buttonHeight){
+            hoveredPet = 0;
+        }
+
+        if(mouseX > catX && mouseX < catX + buttonWidth &&
+        mouseY > catY && mouseY < catY + buttonHeight){
+            hoveredPet = 1;
+        }
+
+        if(mouseX > koalaX && mouseX < koalaX + buttonWidth &&
+        mouseY > koalaY && mouseY < koalaY + buttonHeight){
+            hoveredPet = 2;
+        }
+
+        if(hoveredPet == 0){
+            preview = dogImage;
+            stats = new String[]{
+                "Loyal and energetic",
+                "Needs lots of love",
+                "High happiness gain"
+            };
+        }
+
+        else if(hoveredPet == 1){
+            preview = catImage;
+            stats = new String[]{
+                "Independent",
+                "Gets hungry often",
+                "Moody personality"
+            };
+        }
+
+        else if(hoveredPet == 2){
+            preview = koalaImage;
+            stats = new String[]{
+                "Very sleepy",
+                "Rests frequently",
+                "Low energy drain"
+            };
+        }
+        else{
+            stats = new String[]{
+                ""
+            };
+        }
+
+        int imageSize = 120;
+
+        g2.drawImage(preview,
+            panelX + (panelWidth - imageSize)/2,
+            panelY + 20,
+            imageSize,
+            imageSize,
+            null);
+
+        g2.setFont(g2.getFont().deriveFont(18f));
+
+        int textY = panelY + 170;
+
+        for(String s : stats){
+            int textWidth = (int)g2.getFontMetrics().getStringBounds(s, g2).getWidth();
+            int textX = panelX + (panelWidth - textWidth)/2;
+
+            g2.setColor(Color.WHITE);
+            g2.drawString(s, textX, textY);
+            textY += 25;
+        }
+
 
         g2.setFont(optionFont);
 
-        dogX = gp.screenWidth/2 - buttonWidth/2;
-        dogY = 320;
+        dogX = gp.screenWidth/2 - buttonWidth - 30;
+        dogY = 330;
 
-        catX = gp.screenWidth/2 - buttonWidth/2;
-        catY = 400;
+        catX = gp.screenWidth/2 - buttonWidth - 30;
+        catY = 410;
 
-        koalaX = gp.screenWidth/2 - buttonWidth/2;
-        koalaY = 480;
+        koalaX = gp.screenWidth/2 - buttonWidth - 30;
+        koalaY = 490;
 
-        drawButton(g2, dogX, dogY, "Dog  (needs lots of love)");
-        drawButton(g2, catX, catY, "Cat  (moody, hungry often)");
-        drawButton(g2, koalaX, koalaY, "Koala  (sleepy, rests often)");
+        drawButton(g2, dogX, dogY, "Dog");
+        drawButton(g2, catX, catY, "Cat");
+        drawButton(g2, koalaX, koalaY, "Koala ");
+        
 
         // ---------------- NAME INPUT ----------------
 
         g2.setFont(smallFont);
 
-        String nameText = "Name your pet";
-        int nameX = gp.screenWidth/2 - g2.getFontMetrics().stringWidth(nameText)/2;
-
-        g2.drawString(nameText, nameX, 560);
-
         int boxWidth = 260;
         int boxHeight = 35;
-
         int boxX = gp.screenWidth/2 - boxWidth/2;
-        int boxY = 580;
+        int boxY = gp.screenHeight * 3 / 4;
+        String nameText = "Name your pet:";
+        int nameX = gp.screenWidth/2 - g2.getFontMetrics().stringWidth(nameText)/2;
+
+        g2.drawString(nameText, nameX, boxY-20);
 
         g2.drawRect(boxX, boxY, boxWidth, boxHeight);
 
-        g2.drawString(gp.petNameInput, boxX + 10, boxY + 23);
+        g2.drawString(gp.petNameInput + "_", boxX + 10, boxY+25);
     }
 
     // ---------------- BUTTON DRAWER ----------------
