@@ -521,6 +521,9 @@ public class UI {
         g2.drawString("F = Feed", 20, 180);
         g2.drawString("M = Medicine", 20, 210);
         g2.drawString("P = Play", 20, 240);
+        g2.drawString("Enter = Interact", 20, 270);
+        
+
 
         // message popup
         if(messageOn){
