@@ -34,7 +34,6 @@ public class TileManager {
 		setup(5, "sand", false); //done
 		setup(6, "bush", true); //done
 		setup(7, "woodBricks", false); //done
-		setup(8, "sign", true);
 		setup(9, "rock", true); //done
 		setup(10, "stoneBricks", true); //done
 		setup(14, "miniHouse", true); //done
