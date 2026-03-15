@@ -53,6 +53,7 @@ The program begins execution from the `main()` method in the `Main` class.
 | **F** | Feed Pet |
 | **M** | Medicate Pet |
 | **P** | Play with Pet |
+| **Enter**| Interact with NPCs |
 
 ### 📊 Game Interface
 
