@@ -200,4 +200,8 @@ Developed by:
 
 **FBLA Introduction to Programming Team**  
 
+*Vihaan Goyal**
+**Logan Russo**
+**Lev Rubin**
+
 Westhill High School
