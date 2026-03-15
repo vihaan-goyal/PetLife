@@ -1,8 +1,8 @@
-# Virtual Pet Adventure
+# PetLife
 
 ## Overview
 
-Virtual Pet Adventure is a Java-based interactive program that simulates caring for a digital pet while managing the financial responsibilities of pet ownership.
+PetLife is a Java-based interactive program that simulates caring for a digital pet while managing the financial responsibilities of pet ownership.
 
 The game combines a **2D exploration environment** with a **virtual pet care system** where players complete tasks, earn money, purchase supplies, and improve their pet’s wellbeing.
 
@@ -17,7 +17,7 @@ The program was built using **Java and Java Swing**.
 ## Requirements
 
 - Java JDK 8 or higher
-- A Java IDE (recommended: IntelliJ, Eclipse, or VS Code)
+- A Java IDE (VS Code, IntelliJ, or Eclipse recommended)
 
 ---
 
@@ -36,12 +36,21 @@ The program begins execution from the `main()` method in the `Main` class. :cont
 
 # Controls
 
-| Key | Action |
-|----|----|
-| W | Move Up |
-| A | Move Left |
-| S | Move Down |
-| D | Move Right |
+| Key |    Action    |
+|---- |--------------|
+|  W  |    Move Up   |
+|  A  |   Move Left  |
+|  S  |   Move Down  |
+|  D  |  Move Right  |
+|-----|--------------|
+|  F  |   Feed Pet   |
+|  M  | Medicate Pet |
+|  P  | Play with Pet|
+|-----|--------------|
+|  1  |    Wallet    |
+|  2  |   Inventory  |
+|  3  |   TODO List  |
+|  4  |   Pet Stats  |
 
 Keyboard input is processed through the program’s input handler which listens for key events. :contentReference[oaicite:1]{index=1}
 
@@ -57,7 +66,7 @@ Players create and care for a virtual pet such as:
 - Cat
 - Koala
 
-Each pet has attributes like **happiness** and responds to how well it is treated.
+Each pet has attributes like which responds to how well it is treated.
 
 The pet system is managed through the **PetManager**, which tracks and creates pets. :contentReference[oaicite:2]{index=2}
 
@@ -82,8 +91,7 @@ Players must manage money to care for their pet.
 
 Examples include:
 
-- Buying pet food
-- Paying for supplies
+- Paying for supplies and provisions
 - Completing tasks to earn rewards
 
 This system teaches the **financial responsibility of pet ownership**.
@@ -94,9 +102,9 @@ This system teaches the **financial responsibility of pet ownership**.
 
 The game includes several interactive NPC characters:
 
-- **Old Man NPC** – gives quests and rewards
-- **Merchant NPC** – sells pet food
-- **Quiz Master** – provides educational quizzes
+- **Wiseman NPC** – gives quests and rewards
+- **Merchant NPC** – multiple, sell food, medicine, and toys
+- **Quiz Master NPC** – provides educational quizzes and grades using AI 
 
 These interactions guide players through the gameplay and encourage responsible pet care.
 
@@ -106,10 +114,9 @@ These interactions guide players through the gameplay and encourage responsible 
 
 The game uses a **tile-based world** where the player can explore and interact with objects such as:
 
-- Keys
-- Doors
-- Boots
-- Treasure chests
+- Chests
+- Pet Bed
+- Decorational Objects
 
 Collision detection prevents players from moving through walls or obstacles. :contentReference[oaicite:4]{index=4}
 
@@ -117,24 +124,24 @@ Collision detection prevents players from moving through walls or obstacles. :co
 
 # Program Structure
 
-The program is organized into several packages to maintain modular code structure.
+The program is organized into several packages to maintain a modular code structure.
 
-main
+## main
 Handles the game loop, UI, sound system, and window setup
 
-entity
+## entity 
 Contains player and NPC classes
 
-object
+## object
 Contains interactable world objects (keys, doors, boots, chests)
 
-tile
+## tile
 Handles map loading and rendering
 
-quest
+## quest
 Handles tasks and objectives
 
-pet
+## pet
 Manages the virtual pet system
 
 
@@ -148,12 +155,10 @@ The program uses several data structures to manage game information.
 
 Examples include:
 
-- **Arrays** for storing game objects
+- **Arrays** for storing game objects and world building
 - **ArrayLists** for tracking tasks
 - **Classes and objects** for modular design
 - **Conditional logic** for gameplay events
-
-Tasks are stored in an **ArrayList** and checked each update cycle to determine completion.
 
 ---
 
@@ -174,19 +179,18 @@ Examples include:
 - Java
 - Java Swing (GUI and rendering)
 - Java AWT (keyboard input)
-- Java Sound API (music and sound effects)
-
+  
 No external third-party libraries were required.
 
 ---
 
 # External Resources and Credits
 
-Graphics and sound assets used for educational purposes.
+Graphics and sound are used for educational purposes.
 
 Programming concepts were inspired by common Java game development tutorials.
 
-All original game logic and systems were implemented by the development team.
+All original game logic and systems were implemented by Vihaan Goyal, Logan Russon, and Lev Rubin.
 
 ---
 
@@ -195,4 +199,5 @@ All original game logic and systems were implemented by the development team.
 Developed by:
 
 **FBLA Introduction to Programming Team**  
+
 Westhill High School
