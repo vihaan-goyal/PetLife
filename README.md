@@ -150,11 +150,20 @@ Contains interactable world objects
 ### 📂 `tile`
 Handles **map loading and rendering**
 
+### 📂 `finance`
+Handles **transactions and wallet**
+
+### 📂 `inventory`
+Handles **item count and manipulation of them**
+
 ### 📂 `quest`
 Handles **tasks and objectives**
 
 ### 📂 `pet`
 Manages the **virtual pet system**
+
+### 📂 `quiz`
+Manages the **specific Quizmaster using ChatGPT API to grade responses**
 
 This modular structure improves **code readability, maintainability, and organization**.
 
