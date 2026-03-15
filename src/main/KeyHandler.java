@@ -109,6 +109,11 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_P) playPressed = true;
         if(code == KeyEvent.VK_M) gp.player.useMedicine();
 
+        if(code == KeyEvent.VK_UP) gp.ui.transactionScroll--;
+    
+
+        if(code == KeyEvent.VK_DOWN) gp.ui.transactionScroll++;
+
         if(code == KeyEvent.VK_1){
 
             walletPressed = true;
@@ -128,6 +133,10 @@ public class KeyHandler implements KeyListener {
         }
 
         if(code == KeyEvent.VK_3){
+
+            if(gp.petManager.currentPet != null){
+                gp.petManager.currentPet.clampStats();
+            }
 
             taskPressed = true;
 

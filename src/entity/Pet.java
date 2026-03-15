@@ -53,6 +53,9 @@ public class Pet extends Entity {
     public boolean resting = false;
     public int restTimer = 0;
 
+    public boolean isVaccinated = false;
+
+
 
     GamePanel gp;
 
@@ -100,7 +103,7 @@ public class Pet extends Entity {
 
     
 
-    protected void clampStats() {
+    public void clampStats() {
 
         if(hunger > 100) hunger = 100;
         if(happiness > 100) happiness = 100;
@@ -229,7 +232,7 @@ public class Pet extends Entity {
             if(sicknessTimer > 1200 && ((NPC_OldMan) gp.npc[0]).questStage >= 1) {
                 sicknessTimer = 0;
 
-                if(!sick && Math.random() < 0.10) {
+                if(!sick && Math.random() < 0.10 && isVaccinated) {
                     sick = true;
 
                     gp.ui.showMessage("Oh no, your pet caught an illness!");

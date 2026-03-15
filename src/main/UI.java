@@ -62,6 +62,10 @@ public class UI {
     public int mouseX;
     public int mouseY;
 
+    //transactino scroll
+    int transactionScroll = 0;
+    int maxVisibleTransactions = 12;
+
     
 	
     public UI(GamePanel gp){
@@ -673,24 +677,37 @@ public class UI {
 
         // -------- TRANSACTION HISTORY --------
 
+        if(transactionScroll < 0) transactionScroll = 0;
+
+        if(transactionScroll > gp.wallet.history.size() - maxVisibleTransactions){
+            transactionScroll = Math.max(0, gp.wallet.history.size() - maxVisibleTransactions);
+        }
+
         int transX = gp.screenWidth/2 + 40;   // right side of wallet
         int transY = gp.screenHeight/4 + 120;
 
         g2.setFont(menuFont);
         g2.drawString("Transactions", transX, transY-72);
         g2.setFont(smallFont);
-        for(Transaction t : gp.wallet.history){
+        int startIndex = transactionScroll;
+        int endIndex = Math.min(startIndex + maxVisibleTransactions, gp.wallet.history.size());
+
+        for(int i = startIndex; i < endIndex; i++){         
+
+            Transaction t = gp.wallet.history.get(i);
 
             String sign = (t.amount > 0 ? "+" : "");
 
             g2.drawString(
-                sign + t.amount + " : " + t.description,
+                i+1 + ") " + sign + t.amount + " : " + t.description,
                 transX,
                 transY
             );
 
             transY += 25;
         }
+
+        
     }
 
 }

@@ -58,6 +58,8 @@ public class NPC_Veterinarian extends Entity {
                 "I gave your pet some shots!",
                 "It should be fully vaccinated now!"
             });
+            gp.petManager.currentPet.isVaccinated = true;
+
             oldMan.questStage = 4;
             return;
         }

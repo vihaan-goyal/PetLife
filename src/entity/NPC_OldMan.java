@@ -128,7 +128,7 @@ public class NPC_OldMan extends Entity {
                     "Excellent work!",
                     "You're becoming a pro at taking care of your pet!",
                     "Your Dad will sure be happy!",
-                    "I've given you 3 more tasks."
+                    "Along with the reward, I've given you 3 more tasks."
                 });
 
                 gp.wallet.addTransaction("Quest Reward", 50);
@@ -144,7 +144,7 @@ public class NPC_OldMan extends Entity {
                 ));
                 gp.taskManager.addTask(new Task(
                     "Visit the Toy Shop",
-                    "Buy a pet for your fog",
+                    "Buy a toy for your pet",
                     45 * gp.tileSize,
                     41 * gp.tileSize
                 ));
@@ -167,10 +167,21 @@ public class NPC_OldMan extends Entity {
 
         }
         else if (questStage == 3){
-             gp.ui.startDialogue(new String[]{
+            if(gp.taskManager.allCompleted()){
+                gp.ui.startDialogue(new String[]{
                     "You have proven to be a great pet owner.",
                     "Have fun with your pet!"
                 });
+                gp.wallet.addTransaction("Final Reward", 100);
+                gp.money += 100;
+                questStage = 4;
+            }
+            else{
+                gp.ui.startDialogue(new String[]{
+                    "You still have tasks left.",
+                    "Check your task list."
+                });
+            }
         }
         else if (questStage > 3){
              gp.ui.startDialogue(new String[]{
