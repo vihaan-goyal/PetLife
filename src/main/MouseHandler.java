@@ -16,7 +16,7 @@ public class MouseHandler extends MouseAdapter {
         int mouseX = e.getX();
         int mouseY = e.getY();
 
-        if(gp.gameState == gp.TITLE_STATE){
+        if(gp.gameState == gp.TITLE_STATE && gp.petNameInput.trim().length() >= 2){
 
             // dog button
             if(mouseX > gp.ui.dogX && mouseX < gp.ui.dogX + gp.ui.buttonWidth &&
