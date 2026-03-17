@@ -201,18 +201,6 @@ Examples include:
 - **Java Swing** – GUI and rendering
 - **Java AWT** – keyboard input
 
-No external third-party libraries were required.
-
----
-
-# 📚 External Resources and Credits
-
-Graphics are used for **educational purposes**.
-
-Programming concepts were inspired by common **Java game development tutorials**.
-
-All original game logic and systems were implemented by the development team.
-
 ---
 
 # 👨‍💻 Authors
