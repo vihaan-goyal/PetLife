@@ -4,13 +4,36 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ChatGPTGrader {
 
-    private static final String API_KEY = "YOUR-API-KEY-HERE";
+    static String API_KEY;
+
+    // Load API key once when class loads
+    static {
+        try {
+            Properties props = new Properties();
+            props.load(new FileInputStream("config.properties"));
+            API_KEY = props.getProperty("apiKey");
+
+            if (API_KEY == null || API_KEY.isEmpty()) {
+                System.out.println("No API key found. Using fallback grading.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Could not load config.properties. Using fallback grading.");
+        }
+    }
+
     public static GradeResult grade(String question, String answer){
+
+        // If no API key → skip API entirely
+        if (API_KEY == null || API_KEY.isEmpty()) {
+            return fallback();
+        }
 
         try{
 
@@ -25,9 +48,6 @@ public class ChatGPTGrader {
             conn.setRequestProperty("Content-Type", "application/json");
 
             conn.setDoOutput(true);
-
-            // JSON request with the user's answer
-            // API returns a score and feedback
 
             String prompt =
                 """
@@ -71,16 +91,17 @@ public class ChatGPTGrader {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 
+            StringBuilder response = new StringBuilder();
             String line;
-            String response = "";
 
             while((line = br.readLine()) != null){
-                response += line;
+                response.append(line);
             }
 
             br.close();
 
-            String content = extractContent(response);
+            String content = extractContent(response.toString());
+
             System.out.println("AI content:\n" + content.replace("\\n", "\n").trim());
 
             int score = extractScore(content);
@@ -89,13 +110,16 @@ public class ChatGPTGrader {
             return new GradeResult(score, reason);
 
         }catch(Exception e){
-            System.out.println("API Failed! using fallback");
+            System.out.println("API failed → using fallback");
             System.out.println(e.getMessage());
-            int fallbackScore = (int)(Math.random() * 60 + 30);
-
-
-            return new GradeResult(fallbackScore, null);
+            return fallback();
         }
+    }
+
+    // fallback method
+    private static GradeResult fallback(){
+        int fallbackScore = (int)(Math.random() * 40 + 30);
+        return new GradeResult(fallbackScore, "Fallback grading used");
     }
 
     static int extractScore(String text){
@@ -106,9 +130,8 @@ public class ChatGPTGrader {
         if(m.find()){
             return Integer.parseInt(m.group(1));
         }
-        int fallbackScore = (int)(Math.random() * 60 + 30);
 
-        return fallbackScore;
+        return (int)(Math.random() * 60 + 30);
     }
 
     static String extractReason(String text){
@@ -120,7 +143,7 @@ public class ChatGPTGrader {
             return m.group(1).trim();
         }
 
-        return null;
+        return "No reason provided";
     }
 
     static String extractContent(String json){

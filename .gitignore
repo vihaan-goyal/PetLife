@@ -1,0 +1,12 @@
+# Secrets
+.env
+config.properties
+
+# Java
+*.class
+
+# Build folders
+bin/
+
+# IDE
+.vscode/
