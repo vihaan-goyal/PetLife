@@ -74,7 +74,7 @@ public class NPC_Veterinarian extends Entity {
 
             gp.ui.startDialogue(new String[]{
                 "Hello!",
-                "Here is some dog medicine.",
+                "Here is some medicine.",
                 "That will be $15."
             });
 
@@ -82,7 +82,7 @@ public class NPC_Veterinarian extends Entity {
 
             gp.ui.startDialogue(new String[]{
                 "Hello!",
-                "Dog medicine costs $15.",
+                "Medicine costs $15.",
                 "Come back when you have enough money."
             });
 
